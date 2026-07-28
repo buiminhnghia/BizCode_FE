@@ -1,0 +1,24 @@
+<header class="header">
+  <div class="container header__inner">
+    <a routerLink="/" class="logo" (click)="closeMenu()">
+      <span class="logo__mark">Biz<span>Code</span></span>
+    </a>
+
+    <nav class="nav" [class.nav--open]="menuOpen">
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="closeMenu()">Tính năng</a>
+      <a routerLink="/" fragment="trai-nghiem" (click)="closeMenu()">Trải nghiệm</a>
+      <a routerLink="/bang-gia" routerLinkActive="active" (click)="closeMenu()">Bảng giá</a>
+      <a routerLink="/dich-vu" routerLinkActive="active" (click)="closeMenu()">Dịch vụ</a>
+      <a routerLink="/gioi-thieu" routerLinkActive="active" (click)="closeMenu()">Giới thiệu</a>
+    </nav>
+
+    <div class="header__actions">
+      <a routerLink="/dang-nhap" class="login-link" (click)="closeMenu()">Đăng nhập</a>
+      <a routerLink="/dang-ky" class="btn btn-accent btn-sm" (click)="closeMenu()">Dùng thử miễn phí</a>
+    </div>
+
+    <button class="menu-toggle" (click)="toggleMenu()" aria-label="Mở menu">
+      <span class="material-symbols-outlined">{{ menuOpen ? 'close' : 'menu' }}</span>
+    </button>
+  </div>
+</header>
