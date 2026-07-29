@@ -1,0 +1,172 @@
+<header class="dash-topbar">
+  <div class="dash-topbar__title">
+    <h1>Tổng quan Nhân sự</h1>
+    <span class="dash-topbar__divider"></span>
+    <p>Tháng 10, 2024</p>
+  </div>
+  <div class="dash-topbar__actions">
+    <a routerLink="/dang-ky" class="btn btn-accent btn-sm">Dùng thử miễn phí</a>
+  </div>
+</header>
+
+<div class="dash-content">
+  <!-- Stat cards -->
+  <div class="stat-grid">
+    @for (s of statCards; track s.label) {
+      <div class="stat-tile">
+        <div class="stat-tile__head">
+          <span class="stat-tile__icon"><span class="material-symbols-outlined">{{ s.icon }}</span></span>
+          <span class="stat-tile__tag" [class]="s.tone">{{ s.tag }}</span>
+        </div>
+        <p class="stat-tile__label">{{ s.label }}</p>
+        <h3 class="stat-tile__value">{{ s.value }} @if (s.unit) {<span>{{ s.unit }}</span>}</h3>
+      </div>
+    }
+  </div>
+
+  <!-- Chart + notifications -->
+  <div class="viz-grid">
+    <div class="chart-card">
+      <div class="chart-card__head">
+        <div>
+          <h2>Biến động quân số</h2>
+          <p>Theo dõi nhân sự ra vào trong 6 tháng qua</p>
+        </div>
+        <div class="chart-card__toggle">
+          <button type="button" class="active">6 Tháng</button>
+          <button type="button">Năm</button>
+        </div>
+      </div>
+
+      <div class="chart-card__bars">
+        @for (bar of chartBars; track bar.label) {
+          <div class="chart-bar-col">
+            <div class="chart-bar" [class.current]="bar.current" [style.height.%]="bar.h"></div>
+            <span [class.current]="bar.current">{{ bar.label }}</span>
+          </div>
+        }
+      </div>
+    </div>
+
+    <div class="notif-card">
+      <div class="notif-card__head"><h2>Thông báo mới nhất</h2></div>
+      <div class="notif-card__list">
+        @for (n of notifications; track n.title) {
+          <div class="notif-item">
+            <span class="notif-item__dot" [class]="n.dot"></span>
+            <div>
+              <h4>{{ n.title }}</h4>
+              <p>{{ n.desc }}</p>
+              <span>{{ n.time }}</span>
+            </div>
+          </div>
+        }
+      </div>
+      <div class="notif-card__footer">
+        <button type="button">Xem tất cả thông báo</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Salary table + insight -->
+  <div class="bottom-grid">
+    <div class="salary-card">
+      <div class="salary-card__head">
+        <h2>Bảng lương chi tiết tháng 10</h2>
+        <div class="salary-card__actions">
+          <div class="salary-search">
+            <span class="material-symbols-outlined">search</span>
+            <input type="text" placeholder="Tìm nhân viên..." />
+          </div>
+          <button type="button" class="btn btn-primary btn-sm">
+            <span class="material-symbols-outlined">download</span> Xuất Excel
+          </button>
+        </div>
+      </div>
+
+      <div class="salary-table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Mã NV</th>
+              <th>Họ Tên</th>
+              <th>Phòng Ban</th>
+              <th class="right">Lương Cơ Bản</th>
+              <th class="right">Thưởng</th>
+              <th>Trạng Thái</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (row of salaryRows; track row.code) {
+              <tr>
+                <td class="mono">{{ row.code }}</td>
+                <td class="strong">{{ row.name }}</td>
+                <td>{{ row.dept }}</td>
+                <td class="right mono">{{ row.base }}</td>
+                <td class="right mono" [class.positive]="row.bonusPositive">{{ row.bonus }}</td>
+                <td><span class="status-pill" [class]="row.status">{{ row.status === 'paid' ? 'Đã chi trả' : 'Đang xử lý' }}</span></td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="insight-card">
+      <div class="insight-card__head">
+        <h2>Hệ sinh thái BizCode</h2>
+        <p>Quản trị tập trung mọi nguồn lực doanh nghiệp trên một nền tảng duy nhất.</p>
+      </div>
+      <div class="insight-card__visual">
+        <span class="material-symbols-outlined">hub</span>
+        <div class="insight-card__glass">
+          <div class="insight-card__glass-head">
+            <span class="material-symbols-outlined">shield</span>
+            <strong>Bảo mật đa tầng</strong>
+          </div>
+          <p>Tất cả dữ liệu được mã hóa chuẩn ISO 27001 và lưu trữ đám mây.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="dash-footer">
+  <div class="dash-footer__grid">
+    <div>
+      <span class="logo__mark">Biz<span>Code</span></span>
+      <p>Giải pháp quản trị doanh nghiệp toàn diện cho kỷ nguyên số.</p>
+    </div>
+    <div>
+      <h4>Sản phẩm</h4>
+      <ul>
+        <li><a>Nhân sự &amp; Lương</a></li>
+        <li><a>Quản lý Bán hàng</a></li>
+        <li><a>Kho vận hiện đại</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Hỗ trợ</h4>
+      <ul>
+        <li><a>Liên hệ</a></li>
+        <li><a>Chính sách bảo mật</a></li>
+        <li><a>Điều khoản sử dụng</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Newsletter</h4>
+      <p>Nhận cập nhật tính năng mới nhất.</p>
+      <form class="dash-footer__newsletter" (submit)="$event.preventDefault()">
+        <input type="email" placeholder="Email của bạn" />
+        <button type="submit"><span class="material-symbols-outlined">send</span></button>
+      </form>
+    </div>
+  </div>
+  <div class="dash-footer__bottom">
+    <p>&copy; 2024 BizCode Ecosystem. All rights reserved.</p>
+    <div class="dash-footer__social">
+      <a><span class="material-symbols-outlined">qr_code_2</span></a>
+      <a><span class="material-symbols-outlined">language</span></a>
+    </div>
+  </div>
+</footer>

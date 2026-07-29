@@ -1,0 +1,152 @@
+<div class="lc">
+  <header class="lc-header">
+    <div>
+      <div class="lc-breadcrumb">
+        <span>Thông tin chung</span>
+        <span class="material-symbols-outlined">chevron_right</span>
+        <span class="lc-breadcrumb__current">Giấy phép</span>
+      </div>
+      <h1>Giấy phép kinh doanh &amp; Chứng chỉ</h1>
+      <p>Quản lý và theo dõi trạng thái các loại giấy phép, chứng nhận chất lượng và giấy phép con của doanh nghiệp.</p>
+    </div>
+    <div class="lc-header__actions">
+      <button type="button" class="btn btn-outline"><span class="material-symbols-outlined">file_download</span> Xuất báo cáo</button>
+      <button type="button" class="btn btn-primary"><span class="material-symbols-outlined">add</span> Thêm giấy phép mới</button>
+    </div>
+  </header>
+
+  <!-- Stat cards -->
+  <div class="lc-stats">
+    @for (s of stats; track s.label) {
+      <div class="lc-stat-card" [class]="s.tone">
+        <div class="lc-stat-card__row">
+          <span class="lc-stat-card__icon"><span class="material-symbols-outlined">{{ s.icon }}</span></span>
+          <span class="lc-stat-card__label">{{ s.label }}</span>
+        </div>
+        <p class="lc-stat-card__value">{{ s.value }}</p>
+        <p class="lc-stat-card__desc">{{ s.desc }}</p>
+      </div>
+    }
+  </div>
+
+  <div class="lc-grid">
+    <!-- Left: table + sub sections -->
+    <div class="lc-main">
+      <div class="card lc-table-card">
+        <div class="lc-table-card__head">
+          <h3>Danh sách giấy phép</h3>
+          <div class="lc-table-card__actions">
+            <button type="button" class="icon-btn-plain"><span class="material-symbols-outlined">filter_list</span></button>
+            <button type="button" class="icon-btn-plain"><span class="material-symbols-outlined">more_vert</span></button>
+          </div>
+        </div>
+
+        <div class="lc-table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Tên giấy phép</th>
+                <th>Số hiệu</th>
+                <th>Ngày cấp</th>
+                <th>Hết hạn</th>
+                <th>Trạng thái</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (l of licenses; track l.id) {
+                <tr [class.selected]="selectedId() === l.id" (click)="select(l.id)">
+                  <td>
+                    <div class="lc-name-cell">
+                      <span class="lc-name-cell__icon" [class]="l.status"><span class="material-symbols-outlined">{{ l.icon }}</span></span>
+                      <span class="lc-name-cell__name">{{ l.name }}</span>
+                    </div>
+                  </td>
+                  <td class="mono">{{ l.number }}</td>
+                  <td>{{ l.issued }}</td>
+                  <td [class]="'expiry ' + l.status">{{ l.expires }}</td>
+                  <td><span class="status-pill" [class]="l.status">{{ statusLabel[l.status] }}</span></td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+
+        <div class="lc-table-card__foot">
+          <span>Hiển thị {{ licenses.length }} trên 24 giấy phép</span>
+          <div class="lc-pager">
+            <button type="button" disabled><span class="material-symbols-outlined">chevron_left</span></button>
+            <button type="button"><span class="material-symbols-outlined">chevron_right</span></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="lc-sub-grid">
+        <div class="card lc-sub-card">
+          <h4><span class="material-symbols-outlined">account_tree</span> Giấy phép con liên quan</h4>
+          <div class="lc-sub-list">
+            @for (s of subLicenses; track s.code) {
+              <div class="lc-sub-item">
+                <div>
+                  <p class="lc-sub-item__name">{{ s.name }}</p>
+                  <p class="lc-sub-item__code">{{ s.code }}</p>
+                </div>
+                <span class="material-symbols-outlined">open_in_new</span>
+              </div>
+            }
+          </div>
+        </div>
+
+        <div class="card lc-sub-card">
+          <h4><span class="material-symbols-outlined">history</span> Lịch sử gia hạn</h4>
+          <div class="lc-timeline">
+            @for (h of renewalHistory; track h.date) {
+              <div class="lc-timeline__item">
+                <span class="lc-timeline__dot" [class.current]="h.current"></span>
+                <p class="lc-timeline__date">{{ h.date }}</p>
+                <p class="lc-timeline__desc">{{ h.desc }}</p>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: preview panel -->
+    <div class="lc-side">
+      <div class="card lc-preview">
+        <div class="lc-preview__head">
+          <h3>Chi tiết &amp; Đính kèm</h3>
+          <p>Xem trước bản quét và tài liệu pháp lý</p>
+        </div>
+
+        <div class="lc-preview__body">
+          <div class="lc-doc-visual">
+            <span class="material-symbols-outlined">{{ selected()?.icon }}</span>
+            <div class="lc-doc-visual__caption">
+              <p>{{ selected()?.name }}.pdf</p>
+              <span>Cập nhật lần cuối: 20/05/2023</span>
+            </div>
+          </div>
+
+          <div class="lc-upload">
+            <span class="material-symbols-outlined">cloud_upload</span>
+            <p class="lc-upload__title">Tải lên tài liệu mới</p>
+            <p class="lc-upload__desc">Kéo thả file PDF, JPG hoặc PNG tại đây</p>
+            <button type="button" class="btn btn-outline btn-sm">Chọn tệp từ máy tính</button>
+          </div>
+
+          <div class="lc-meta">
+            <div class="lc-meta__row"><span>Người phụ trách</span><strong>Nguyễn Văn A</strong></div>
+            <div class="lc-meta__row"><span>Nơi cấp</span><strong>Sở KH &amp; ĐT TP.HCM</strong></div>
+            <div class="lc-meta__row"><span>Vốn điều lệ</span><strong class="mono">10,000,000,000 VND</strong></div>
+          </div>
+        </div>
+
+        <div class="lc-preview__actions">
+          <button type="button" class="btn btn-outline">Tải xuống</button>
+          <button type="button" class="btn btn-primary">Gia hạn ngay</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

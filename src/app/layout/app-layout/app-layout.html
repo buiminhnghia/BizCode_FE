@@ -1,0 +1,91 @@
+<!-- Top nav -->
+<nav class="topnav">
+  <div class="topnav__inner">
+    <div class="topnav__left">
+      <a routerLink="/app" class="logo__mark">Biz<span>Code</span></a>
+      <div class="topnav__search">
+        <span class="material-symbols-outlined">search</span>
+        <input type="text" placeholder="Tìm kiếm hệ thống..." />
+      </div>
+    </div>
+
+    <div class="topnav__right">
+      <button type="button" class="icon-btn"><span class="material-symbols-outlined">notifications</span></button>
+      <button type="button" class="icon-btn"><span class="material-symbols-outlined">settings</span></button>
+      <button type="button" class="icon-btn"><span class="material-symbols-outlined">help</span></button>
+      <span class="topnav__divider"></span>
+      <div class="topnav__profile">
+        <span class="topnav__avatar">AD</span>
+        <span>Admin</span>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="app-shell">
+  <!-- Sidebar -->
+  <aside class="app-sidebar">
+    <div class="app-sidebar__heading">
+      <h2>BizCode ERP</h2>
+      <p>Enterprise Management</p>
+    </div>
+
+    <nav class="app-nav">
+      @for (group of navGroups; track group.key) {
+        <div class="app-nav__group">
+          <button
+            type="button"
+            class="app-nav__group-btn"
+            [class.active]="group.key === activeGroupKey()"
+            (click)="toggleGroup(group.key)"
+          >
+            <span class="app-nav__group-label">
+              <span class="material-symbols-outlined">{{ group.icon }}</span>
+              {{ group.label }}
+            </span>
+            <span class="material-symbols-outlined app-nav__arrow" [class.open]="isOpen(group.key)">expand_more</span>
+          </button>
+
+          @if (isOpen(group.key)) {
+            <div class="app-nav__items">
+              @for (item of group.items; track item.label) {
+                @if (item.path) {
+                  <a class="app-nav__item" [routerLink]="item.path" [class.active]="isItemActive(item)">
+                    <span class="material-symbols-outlined">{{ item.icon }}</span>
+                    {{ item.label }}
+                  </a>
+                } @else {
+                  <span class="app-nav__item app-nav__item--disabled">
+                    <span class="material-symbols-outlined">{{ item.icon }}</span>
+                    {{ item.label }}
+                  </span>
+                }
+              }
+            </div>
+          }
+        </div>
+      }
+    </nav>
+
+    <div class="app-sidebar__footer">
+      <button type="button" class="btn btn-primary app-sidebar__report-btn">
+        <span class="material-symbols-outlined">add_chart</span> Báo cáo mới
+      </button>
+      <a class="app-sidebar__link"><span class="material-symbols-outlined">settings</span> Cài đặt</a>
+      <a class="app-sidebar__link"><span class="material-symbols-outlined">contact_support</span> Hỗ trợ</a>
+    </div>
+  </aside>
+
+  <!-- Main content -->
+  <main class="app-main">
+    <router-outlet />
+  </main>
+</div>
+
+<!-- Mobile bottom nav -->
+<div class="mobile-nav">
+  <button type="button" class="active"><span class="material-symbols-outlined">info</span><span>Hồ sơ</span></button>
+  <button type="button"><span class="material-symbols-outlined">groups</span><span>Nhân sự</span></button>
+  <button type="button"><span class="material-symbols-outlined">inventory_2</span><span>Kho</span></button>
+  <button type="button"><span class="material-symbols-outlined">analytics</span><span>Báo cáo</span></button>
+</div>

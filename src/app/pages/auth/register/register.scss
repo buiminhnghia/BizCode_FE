@@ -398,4 +398,10 @@
 
     &:hover { color: var(--pink-600); }
   }
+
+  &__redirect-hint {
+    margin: 18px 0 0;
+    font-size: 12px;
+    color: var(--text-500);
+  }
 }
