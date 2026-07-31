@@ -1,0 +1,136 @@
+<div class="at">
+  <header class="at-header">
+    <div>
+      <div class="at-breadcrumb">
+        <span>Nhân sự</span>
+        <span class="material-symbols-outlined">chevron_right</span>
+        <span class="at-breadcrumb__current">Quản lý chấm công</span>
+      </div>
+      <h1>Quản lý chấm công</h1>
+      <p>Theo dõi thời gian làm việc và lịch sử check-in của nhân viên.</p>
+    </div>
+    <div class="at-header__actions">
+      <div class="at-view-toggle">
+        <button type="button" [class.active]="viewMode() === 'table'" (click)="setViewMode('table')">
+          <span class="material-symbols-outlined">table_rows</span> Bảng biểu
+        </button>
+        <button type="button" [class.active]="viewMode() === 'calendar'" (click)="setViewMode('calendar')">
+          <span class="material-symbols-outlined">calendar_month</span> Lịch
+        </button>
+      </div>
+      <button type="button" class="btn btn-accent"><span class="material-symbols-outlined">download</span> Xuất báo cáo</button>
+    </div>
+  </header>
+
+  <!-- Context cards -->
+  <div class="at-context">
+    <div class="card at-context-card">
+      <span class="at-context-card__icon navy"><span class="material-symbols-outlined">event_available</span></span>
+      <div>
+        <p>Hôm nay</p>
+        <strong>{{ summary.today }}</strong>
+      </div>
+    </div>
+
+    <div class="card at-context-card">
+      <span class="at-context-card__icon pink"><span class="material-symbols-outlined">person_pin_circle</span></span>
+      <div>
+        <p>Đã có mặt</p>
+        <strong>{{ summary.present }}</strong>
+      </div>
+    </div>
+
+    <div class="card at-month-card">
+      <div class="at-month-card__nav">
+        <button type="button" class="icon-btn-plain"><span class="material-symbols-outlined">chevron_left</span></button>
+        <strong>{{ monthLabel }}</strong>
+        <button type="button" class="icon-btn-plain"><span class="material-symbols-outlined">chevron_right</span></button>
+      </div>
+      <span class="at-month-card__divider"></span>
+      <select [value]="selectedDept()" (change)="setDept($any($event.target).value)">
+        @for (d of departments; track d) {
+          <option [value]="d">{{ d }}</option>
+        }
+      </select>
+    </div>
+  </div>
+
+  @if (viewMode() === 'table') {
+    <!-- Table view -->
+    <div class="card at-table-card">
+      <div class="at-table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Nhân viên</th>
+              <th>Ngày</th>
+              <th>Giờ vào</th>
+              <th>Giờ ra</th>
+              <th>Tổng giờ</th>
+              <th>Ghi chú</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (r of filteredRows(); track r.code) {
+              <tr>
+                <td>
+                  <div class="at-employee-cell">
+                    <span class="at-employee-cell__avatar">{{ r.initials }}</span>
+                    <div>
+                      <p class="at-employee-cell__name">{{ r.name }}</p>
+                      <p class="at-employee-cell__code">{{ r.code }}</p>
+                    </div>
+                  </div>
+                </td>
+                <td class="mono">{{ r.date }}</td>
+                <td><span class="time-badge" [class.late]="r.checkInLate">{{ r.checkIn }}</span></td>
+                <td><span class="time-badge">{{ r.checkOut }}</span></td>
+                <td class="hours">{{ r.totalHours }}</td>
+                <td><span class="note-pill" [class]="r.noteTone">{{ r.note }}</span></td>
+                <td class="right">
+                  <button type="button" class="icon-btn-plain"><span class="material-symbols-outlined">more_vert</span></button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <div class="at-table-card__foot">
+        <span>Hiển thị 1-10 trên {{ totalEmployees }} nhân viên</span>
+        <div class="at-pager">
+          <button type="button" [disabled]="page() === 1" (click)="goToPage(page() - 1)">Trước</button>
+          <button type="button" class="at-pager__num" [class.active]="page() === 1" (click)="goToPage(1)">1</button>
+          <button type="button" class="at-pager__num" [class.active]="page() === 2" (click)="goToPage(2)">2</button>
+          <button type="button" (click)="goToPage(page() + 1)">Sau</button>
+        </div>
+      </div>
+    </div>
+  } @else {
+    <!-- Calendar view -->
+    <div class="card at-calendar-card">
+      <div class="at-calendar-grid">
+        @for (h of weekdayHeaders; track h) {
+          <div class="at-calendar-grid__header" [class.weekend]="h === 'Sat' || h === 'Sun'">{{ h }}</div>
+        }
+        @for (d of calendarDays; track $index) {
+          <div class="at-calendar-cell" [class.muted]="d.muted" [class.current]="d.current">
+            <div class="at-calendar-cell__head">
+              <span>{{ d.day }}</span>
+              @if (d.weekend && !d.muted) {
+                <span class="at-calendar-cell__dot"></span>
+              }
+            </div>
+            @if (!d.muted) {
+              <div class="at-calendar-cell__badges">
+                <span class="present">142 Present</span>
+                <span class="leaves">8 Leaves</span>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    </div>
+  }
+</div>

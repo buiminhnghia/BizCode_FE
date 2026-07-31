@@ -1,0 +1,119 @@
+<div class="so">
+  <header class="so-header">
+    <div>
+      <h1>Quản lý đơn hàng bán</h1>
+      <p>Theo dõi và quản lý các giao dịch bán hàng của doanh nghiệp</p>
+    </div>
+    <div class="so-header__actions">
+      <button type="button" class="btn btn-outline"><span class="material-symbols-outlined">download</span> Export Excel</button>
+      <button type="button" class="btn btn-primary"><span class="material-symbols-outlined">add_circle</span> Tạo đơn mới</button>
+    </div>
+  </header>
+
+  <!-- Stats -->
+  <div class="so-stats">
+    @for (s of stats; track s.label) {
+      <div class="card so-stat-card">
+        <div class="so-stat-card__row">
+          <span class="so-stat-card__icon"><span class="material-symbols-outlined">{{ s.icon }}</span></span>
+          @if (s.note) {
+            <span class="so-stat-card__note" [class]="s.tone">{{ s.note }}</span>
+          }
+        </div>
+        <p>{{ s.label }}</p>
+        <h3>{{ s.value }}</h3>
+      </div>
+    }
+  </div>
+
+  <!-- Filters -->
+  <div class="so-filters">
+    <div class="so-filters__field">
+      <span class="material-symbols-outlined">filter_list</span>
+      <select [value]="selectedStatus()" (change)="setStatus($any($event.target).value)">
+        @for (opt of statusOptions; track opt.value) {
+          <option [value]="opt.value">{{ opt.label }}</option>
+        }
+      </select>
+    </div>
+    <div class="so-filters__field">
+      <span class="material-symbols-outlined">calendar_month</span>
+      <input type="text" placeholder="Chọn khoảng ngày" />
+    </div>
+    <button type="button" class="btn btn-accent so-filters__apply">Áp dụng lọc</button>
+    <button type="button" class="so-filters__clear" (click)="clearFilters()">Xóa lọc</button>
+  </div>
+
+  <!-- Table -->
+  <div class="card so-table-card">
+    <div class="so-table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Mã Đơn Hàng</th>
+            <th>Khách Hàng</th>
+            <th class="center">Ngày Đặt</th>
+            <th class="right">Tổng Tiền</th>
+            <th class="center">Trạng Thái</th>
+            <th class="center">Thao Tác</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (o of filteredOrders(); track o.id) {
+            <tr>
+              <td class="mono strong">{{ o.code }}</td>
+              <td>
+                <div class="so-customer-cell">
+                  <span class="so-customer-cell__avatar">{{ o.initials }}</span>
+                  <div>
+                    <p class="so-customer-cell__name">{{ o.customer }}</p>
+                    <p class="so-customer-cell__email">{{ o.email }}</p>
+                  </div>
+                </div>
+              </td>
+              <td class="center">{{ o.date }}</td>
+              <td class="right mono strong">{{ o.total }}</td>
+              <td class="center"><span class="status-pill" [class]="o.status">{{ statusLabel[o.status] }}</span></td>
+              <td class="center">
+                <button type="button" class="icon-btn-plain"><span class="material-symbols-outlined">more_horiz</span></button>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="6" class="so-empty">Không có đơn hàng phù hợp với bộ lọc.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="so-table-card__foot">
+      <span>Hiển thị {{ filteredOrders().length }} của {{ totalOrders | number }} đơn hàng</span>
+      <div class="so-pager">
+        <button type="button" [disabled]="page() === 1" (click)="goToPage(page() - 1)"><span class="material-symbols-outlined">chevron_left</span></button>
+        @for (p of [1, 2, 3]; track p) {
+          <button type="button" class="so-pager__num" [class.active]="page() === p" (click)="goToPage(p)">{{ p }}</button>
+        }
+        <span>...</span>
+        <button type="button" class="so-pager__num" [class.active]="page() === 257" (click)="goToPage(257)">257</button>
+        <button type="button" (click)="goToPage(page() + 1)"><span class="material-symbols-outlined">chevron_right</span></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Promo cards -->
+  <div class="so-promos">
+    <div class="so-promo so-promo--navy">
+      <span class="material-symbols-outlined so-promo__icon">auto_awesome</span>
+      <h4>Tự động hóa báo cáo</h4>
+      <p>BizCode giúp bạn tự động gửi báo cáo doanh thu mỗi ngày qua email.</p>
+      <a>Tìm hiểu thêm</a>
+    </div>
+    <div class="so-promo so-promo--pink">
+      <span class="material-symbols-outlined so-promo__icon">hub</span>
+      <h4>Kết nối đa kênh</h4>
+      <p>Đồng bộ đơn hàng từ Shopee, Lazada, TikTok Shop về cùng một nơi.</p>
+      <a>Kết nối ngay</a>
+    </div>
+  </div>
+</div>

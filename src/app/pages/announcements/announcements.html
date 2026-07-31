@@ -1,0 +1,122 @@
+<div class="an">
+  <header class="an-header">
+    <div>
+      <h1>Thông báo nội bộ</h1>
+      <p>Quản lý và cập nhật các thông tin chính thức từ công ty.</p>
+    </div>
+    <button type="button" class="btn btn-primary"><span class="material-symbols-outlined">add</span> Tạo thông báo mới</button>
+  </header>
+
+  <!-- Stats -->
+  <div class="an-stats">
+    @for (s of stats; track s.label) {
+      <div class="card an-stat-card">
+        <span class="an-stat-card__icon" [class]="s.tone"><span class="material-symbols-outlined">{{ s.icon }}</span></span>
+        <div>
+          <p>{{ s.label }}</p>
+          <strong [class]="s.tone">{{ s.value }}</strong>
+        </div>
+      </div>
+    }
+  </div>
+
+  <!-- List container -->
+  <div class="card an-list-card">
+    <div class="an-toolbar">
+      <div class="an-toolbar__filters">
+        <select [value]="selectedCategory()" (change)="setCategory($any($event.target).value)">
+          @for (c of categories; track c) {
+            <option [value]="c">{{ c }}</option>
+          }
+        </select>
+        <select>
+          <option>Mới nhất</option>
+          <option>Cũ nhất</option>
+          <option>Quan trọng nhất</option>
+        </select>
+      </div>
+      <div class="an-toolbar__view">
+        <span>Hiển thị {{ filteredAnnouncements().length }}/{{ totalCount }}</span>
+        <div class="an-view-toggle">
+          <button type="button" [class.active]="viewMode() === 'list'" (click)="setViewMode('list')"><span class="material-symbols-outlined">view_list</span></button>
+          <button type="button" [class.active]="viewMode() === 'grid'" (click)="setViewMode('grid')"><span class="material-symbols-outlined">grid_view</span></button>
+        </div>
+      </div>
+    </div>
+
+    @if (viewMode() === 'list') {
+      <div class="an-items">
+        @for (a of filteredAnnouncements(); track a.id) {
+          <div class="an-item" [class.important]="a.badge === 'important'">
+            <div class="an-item__date" [class]="a.badge">
+              <span>{{ a.dateShort }}</span>
+              <strong>{{ a.dateLabel }}</strong>
+            </div>
+            <div class="an-item__body">
+              <div class="an-item__meta">
+                @if (a.badge === 'important') {
+                  <span class="an-badge important">Quan trọng</span>
+                } @else if (a.badge === 'new') {
+                  <span class="an-badge new">Mới</span>
+                }
+                <span class="an-item__category">{{ a.category }}</span>
+                <span class="an-item__time">&bull; {{ a.timeAgo }}</span>
+              </div>
+              <h3>{{ a.title }}</h3>
+              <p>{{ a.desc }}</p>
+              <div class="an-item__footer">
+                <div class="an-author">
+                  <span class="an-author__avatar">{{ a.authorInitials }}</span>
+                  <span>{{ a.author }}</span>
+                </div>
+                <div class="an-item__stats">
+                  <span><span class="material-symbols-outlined">visibility</span> {{ a.views }}</span>
+                  <span><span class="material-symbols-outlined">chat_bubble</span> {{ a.comments }}</span>
+                  @if (a.attachments) {
+                    <span><span class="material-symbols-outlined">attach_file</span> {{ a.attachments }}</span>
+                  }
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    } @else {
+      <div class="an-grid">
+        @for (a of filteredAnnouncements(); track a.id) {
+          <div class="an-grid-card" [class.important]="a.badge === 'important'">
+            <div class="an-item__meta">
+              @if (a.badge === 'important') {
+                <span class="an-badge important">Quan trọng</span>
+              } @else if (a.badge === 'new') {
+                <span class="an-badge new">Mới</span>
+              }
+              <span class="an-item__category">{{ a.category }}</span>
+            </div>
+            <h3>{{ a.title }}</h3>
+            <p>{{ a.desc }}</p>
+            <div class="an-grid-card__footer">
+              <span class="an-author__avatar">{{ a.authorInitials }}</span>
+              <span class="an-item__stats">
+                <span><span class="material-symbols-outlined">visibility</span> {{ a.views }}</span>
+                <span><span class="material-symbols-outlined">chat_bubble</span> {{ a.comments }}</span>
+              </span>
+            </div>
+          </div>
+        }
+      </div>
+    }
+
+    <div class="an-pagination">
+      <button type="button" [disabled]="page() === 1" (click)="goToPage(page() - 1)"><span class="material-symbols-outlined">chevron_left</span></button>
+      @for (p of [1, 2, 3]; track p) {
+        <button type="button" class="an-pagination__num" [class.active]="page() === p" (click)="goToPage(p)">{{ p }}</button>
+      }
+      <span>...</span>
+      <button type="button" class="an-pagination__num" [class.active]="page() === 13" (click)="goToPage(13)">13</button>
+      <button type="button" (click)="goToPage(page() + 1)"><span class="material-symbols-outlined">chevron_right</span></button>
+    </div>
+  </div>
+
+  <span class="an-watermark material-symbols-outlined">campaign</span>
+</div>

@@ -1,0 +1,134 @@
+<div class="wr">
+  <header class="wr-header">
+    <div>
+      <h1>Quản lý bảo hành/sửa chữa</h1>
+      <p>Theo dõi tình trạng thiết bị và thời hạn hỗ trợ kỹ thuật cho khách hàng.</p>
+    </div>
+    <div class="wr-header__actions">
+      <button type="button" class="btn btn-outline"><span class="material-symbols-outlined">filter_list</span> Bộ lọc</button>
+      <button type="button" class="btn btn-primary"><span class="material-symbols-outlined">add_circle</span> Tiếp nhận bảo hành</button>
+    </div>
+  </header>
+
+  <!-- Stats -->
+  <div class="wr-stats">
+    @for (s of stats; track s.label) {
+      <div class="card wr-stat-card">
+        <div class="wr-stat-card__row">
+          <span class="wr-stat-card__icon" [class]="s.tone"><span class="material-symbols-outlined">{{ s.icon }}</span></span>
+          @if (s.note) {
+            <span class="wr-stat-card__note" [class]="s.tone">{{ s.note }}</span>
+          }
+        </div>
+        <p>{{ s.label }}</p>
+        <h3>{{ s.value }}</h3>
+      </div>
+    }
+  </div>
+
+  <!-- Table -->
+  <div class="card wr-table-card">
+    <div class="wr-table-card__head">
+      <h3>Danh sách thiết bị bảo hành</h3>
+      <div class="wr-search">
+        <span class="material-symbols-outlined">search</span>
+        <input
+          type="text"
+          placeholder="Tìm Serial, tên khách..."
+          [value]="searchTerm()"
+          (input)="setSearchTerm($any($event.target).value)"
+        />
+      </div>
+    </div>
+
+    <div class="wr-table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Product Name</th>
+            <th>Customer</th>
+            <th>Serial Number</th>
+            <th>Expiry Date</th>
+            <th>Service Status</th>
+            <th class="right">Thao tác</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (i of filteredItems(); track i.id) {
+            <tr>
+              <td>
+                <div class="wr-product-cell">
+                  <span class="wr-product-cell__icon"><span class="material-symbols-outlined">{{ i.icon }}</span></span>
+                  <div>
+                    <p class="wr-product-cell__name">{{ i.product }}</p>
+                    <p class="wr-product-cell__brand">{{ i.brand }}</p>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <p class="wr-customer-cell__name">{{ i.customer }}</p>
+                <p class="wr-customer-cell__email">{{ i.email }}</p>
+              </td>
+              <td class="mono">{{ i.serial }}</td>
+              <td>
+                <p class="wr-expiry-cell__date">{{ i.expiryDate }}</p>
+                <p class="wr-expiry-cell__note" [class]="i.expiryTone">{{ i.expiryNote }}</p>
+              </td>
+              <td><span class="status-pill" [class]="i.status"><span class="dot"></span>{{ statusLabel[i.status] }}</span></td>
+              <td class="right">
+                <button type="button" class="icon-btn-plain"><span class="material-symbols-outlined">more_vert</span></button>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="6" class="wr-empty">Không tìm thấy thiết bị phù hợp.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="wr-table-card__foot">
+      <span>Hiển thị {{ filteredItems().length }} trên {{ totalRecords }} bản ghi</span>
+      <div class="wr-pager">
+        <button type="button" [disabled]="page() === 1" (click)="goToPage(page() - 1)"><span class="material-symbols-outlined">chevron_left</span></button>
+        @for (p of [1, 2, 3]; track p) {
+          <button type="button" class="wr-pager__num" [class.active]="page() === p" (click)="goToPage(p)">{{ p }}</button>
+        }
+        <button type="button" (click)="goToPage(page() + 1)"><span class="material-symbols-outlined">chevron_right</span></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom asymmetric -->
+  <div class="wr-bottom">
+    <div class="wr-log">
+      <h4><span class="material-symbols-outlined">history_edu</span> Nhật ký sửa chữa mới nhất</h4>
+      <div class="wr-log__list">
+        @for (a of activityLog; track a.title) {
+          <div class="card wr-log-item" [class]="a.tone">
+            <span class="wr-log-item__icon" [class]="a.tone"><span class="material-symbols-outlined">{{ a.icon }}</span></span>
+            <div>
+              <p class="wr-log-item__title">{{ a.title }}</p>
+              <p class="wr-log-item__desc">{{ a.desc }}</p>
+              <span class="wr-log-item__time">{{ a.time }}</span>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+
+    <div class="wr-parts">
+      <h4><span class="material-symbols-outlined">pie_chart</span> Tỷ lệ linh kiện</h4>
+      <div class="card wr-parts-card">
+        <div class="wr-parts-donut" [style.background]="'conic-gradient(var(--navy-800) 0% ' + genuinePartsPct + '%, #874e58 ' + genuinePartsPct + '% 100%)'">
+          <div class="wr-parts-donut__hole">{{ genuinePartsPct }}%</div>
+        </div>
+        <div class="wr-parts-legend">
+          <span><span class="dot navy"></span> Chính hãng</span>
+          <span><span class="dot mauve"></span> OEM</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

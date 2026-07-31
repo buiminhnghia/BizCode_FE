@@ -1,0 +1,121 @@
+<div class="pd">
+  <header class="pd-header">
+    <div>
+      <h1>Danh mục sản phẩm</h1>
+      <p>Quản lý và theo dõi thông tin chi tiết các sản phẩm trong kho.</p>
+    </div>
+    <div class="pd-header__actions">
+      <button type="button" class="btn btn-outline"><span class="material-symbols-outlined">upload_file</span> Nhập CSV</button>
+      <button type="button" class="btn btn-accent"><span class="material-symbols-outlined">add</span> Thêm sản phẩm</button>
+    </div>
+  </header>
+
+  <!-- Stats -->
+  <div class="pd-stats">
+    @for (s of stats; track s.label) {
+      <div class="card pd-stat-card">
+        <p>{{ s.label }}</p>
+        <div class="pd-stat-card__row">
+          <h3>{{ s.value }}</h3>
+          @if (s.note) {
+            <span [class]="s.tone">{{ s.note }}</span>
+          }
+        </div>
+      </div>
+    }
+  </div>
+
+  <!-- Table container -->
+  <div class="card pd-table-card">
+    <div class="pd-filters">
+      <div class="pd-search">
+        <span class="material-symbols-outlined">search</span>
+        <input
+          type="text"
+          placeholder="Tìm theo tên, mã SKU..."
+          [value]="searchTerm()"
+          (input)="setSearchTerm($any($event.target).value)"
+        />
+      </div>
+      <select [value]="selectedCategory()" (change)="setCategory($any($event.target).value)">
+        @for (c of categories; track c) {
+          <option [value]="c">{{ c }}</option>
+        }
+      </select>
+      <select>
+        <option>Tất cả thương hiệu</option>
+        <option>Samsung</option>
+        <option>Apple</option>
+        <option>Sony</option>
+      </select>
+      <button type="button" class="icon-btn-outline"><span class="material-symbols-outlined">filter_list</span></button>
+      <div class="pd-filters__display">
+        <span>Hiển thị:</span>
+        <select>
+          <option>10</option>
+          <option selected>25</option>
+          <option>50</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="pd-table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th class="checkbox-col"><input type="checkbox" [checked]="allSelected()" (change)="toggleAll()" /></th>
+            <th>Sản phẩm</th>
+            <th>Danh mục</th>
+            <th>Giá bán</th>
+            <th>Tồn kho</th>
+            <th>Trạng thái</th>
+            <th class="right">Thao tác</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (p of filteredProducts(); track p.id) {
+            <tr [class.selected]="isSelected(p.id)">
+              <td class="checkbox-col"><input type="checkbox" [checked]="isSelected(p.id)" (change)="toggleOne(p.id)" /></td>
+              <td>
+                <div class="pd-product-cell">
+                  <span class="pd-product-cell__icon"><span class="material-symbols-outlined">{{ p.icon }}</span></span>
+                  <div>
+                    <p class="pd-product-cell__name">{{ p.name }}</p>
+                    <p class="pd-product-cell__sku">SKU: {{ p.sku }}</p>
+                  </div>
+                </div>
+              </td>
+              <td>{{ p.category }}</td>
+              <td class="mono strong">{{ p.price }}</td>
+              <td class="mono">{{ p.stock }}</td>
+              <td><span class="status-pill" [class]="p.status">{{ statusLabel[p.status] }}</span></td>
+              <td class="right">
+                <div class="pd-row-actions">
+                  <button type="button" class="icon-btn-plain"><span class="material-symbols-outlined">edit</span></button>
+                  <button type="button" class="icon-btn-plain danger"><span class="material-symbols-outlined">delete</span></button>
+                </div>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="7" class="pd-empty">Không tìm thấy sản phẩm phù hợp.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="pd-table-card__foot">
+      <span>Đang xem {{ filteredProducts().length }} trên tổng số {{ totalProducts }} sản phẩm</span>
+      <div class="pd-pager">
+        <button type="button" disabled><span class="material-symbols-outlined">chevron_left</span></button>
+        <button type="button" class="active">1</button>
+        <button type="button">2</button>
+        <button type="button">3</button>
+        <span>...</span>
+        <button type="button">32</button>
+        <button type="button"><span class="material-symbols-outlined">chevron_right</span></button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,88 @@
+<div class="po">
+  <header class="po-header">
+    <div>
+      <h1>Quản lý đơn đặt hàng</h1>
+      <p>Theo dõi và quản lý quy trình mua hàng tập trung.</p>
+    </div>
+    <button type="button" class="btn btn-primary"><span class="material-symbols-outlined">add</span> Tạo đơn hàng mới</button>
+  </header>
+
+  <!-- Stats -->
+  <div class="po-stats">
+    @for (s of stats; track s.label) {
+      <div class="card po-stat-card">
+        <div class="po-stat-card__row">
+          <span class="po-stat-card__icon" [class]="s.tone"><span class="material-symbols-outlined">{{ s.icon }}</span></span>
+        </div>
+        <p>{{ s.label }}</p>
+        <div class="po-stat-card__value">
+          <h3>{{ s.value }}</h3>
+          <span [class]="s.tone">{{ s.note }}</span>
+        </div>
+      </div>
+    }
+  </div>
+
+  <!-- Table -->
+  <div class="card po-table-card">
+    <div class="po-table-card__head">
+      <h4>Danh sách đơn hàng</h4>
+      <div class="po-table-card__actions">
+        <div class="po-filters__field">
+          <span class="material-symbols-outlined">filter_list</span>
+          <select [value]="selectedStatus()" (change)="setStatus($any($event.target).value)">
+            @for (opt of statusOptions; track opt.value) {
+              <option [value]="opt.value">{{ opt.label }}</option>
+            }
+          </select>
+        </div>
+        <button type="button" class="btn btn-outline btn-sm" (click)="clearFilters()">Xóa lọc</button>
+        <button type="button" class="btn btn-outline btn-sm"><span class="material-symbols-outlined">download</span> Xuất CSV</button>
+      </div>
+    </div>
+
+    <div class="po-table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Mã đơn</th>
+            <th>Nhà cung cấp</th>
+            <th>Ngày đặt</th>
+            <th class="right">Tổng giá trị</th>
+            <th class="center">Trạng thái</th>
+            <th class="center"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (o of filteredOrders(); track o.id) {
+            <tr>
+              <td class="mono strong">{{ o.code }}</td>
+              <td>{{ o.supplier }}</td>
+              <td>{{ o.date }}</td>
+              <td class="right mono strong">{{ o.total }}</td>
+              <td class="center"><span class="status-pill" [class]="o.status">{{ statusLabel[o.status] }}</span></td>
+              <td class="center">
+                <button type="button" class="icon-btn-plain"><span class="material-symbols-outlined">more_vert</span></button>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="6" class="po-empty">Không có đơn hàng phù hợp với bộ lọc.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="po-table-card__foot">
+      <span>Hiển thị {{ filteredOrders().length }} / {{ totalOrders }} đơn hàng</span>
+      <div class="po-pager">
+        <button type="button" disabled><span class="material-symbols-outlined">chevron_left</span></button>
+        <button type="button" class="active">1</button>
+        <button type="button">2</button>
+        <button type="button">3</button>
+        <button type="button"><span class="material-symbols-outlined">chevron_right</span></button>
+      </div>
+    </div>
+  </div>
+</div>

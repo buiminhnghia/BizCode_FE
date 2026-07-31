@@ -1,0 +1,106 @@
+<div class="br">
+  <header class="br-header">
+    <div>
+      <h1>Quản lý chi nhánh/cửa hàng</h1>
+      <p>Giám sát hoạt động và hiệu suất của toàn bộ mạng lưới 24 điểm kinh doanh.</p>
+    </div>
+    <button type="button" class="btn btn-primary"><span class="material-symbols-outlined">add</span> Thêm chi nhánh mới</button>
+  </header>
+
+  <!-- Stats -->
+  <div class="br-stats">
+    @for (s of stats; track s.label) {
+      <div class="card br-stat-card">
+        <div class="br-stat-card__row">
+          <span class="br-stat-card__icon" [class]="s.tone"><span class="material-symbols-outlined">{{ s.icon }}</span></span>
+          <span class="br-stat-card__note" [class]="s.tone">{{ s.note }}</span>
+        </div>
+        <p class="br-stat-card__label">{{ s.label }}</p>
+        <h3>{{ s.value }}</h3>
+      </div>
+    }
+  </div>
+
+  <!-- Filters -->
+  <div class="card br-filters">
+    <div class="br-search">
+      <span class="material-symbols-outlined">search</span>
+      <input type="text" placeholder="Tìm tên chi nhánh, mã số hoặc quản lý..." [value]="searchTerm()" (input)="setSearchTerm($any($event.target).value)" />
+    </div>
+    <select [value]="selectedRegion()" (change)="setRegion($any($event.target).value)">
+      @for (r of regions; track r.value) {
+        <option [value]="r.value">{{ r.label }}</option>
+      }
+    </select>
+    <select [value]="selectedStatus()" (change)="setStatus($any($event.target).value)">
+      @for (s of statuses; track s.value) {
+        <option [value]="s.value">{{ s.label }}</option>
+      }
+    </select>
+    <button type="button" class="btn btn-outline btn-sm"><span class="material-symbols-outlined">filter_list</span> Lọc nâng cao</button>
+  </div>
+
+  <!-- Branch grid -->
+  <div class="br-grid">
+    @for (b of filteredBranches(); track b.id) {
+      <div class="card br-card">
+        <div class="br-card__photo">
+          <span class="material-symbols-outlined">{{ b.icon }}</span>
+          <span class="br-card__badge" [class]="b.status">{{ statusLabel[b.status] }}</span>
+        </div>
+        <div class="br-card__body">
+          <div class="br-card__top">
+            <h3>{{ b.name }}</h3>
+            <span class="material-symbols-outlined br-card__more">more_vert</span>
+          </div>
+          <div class="br-card__address">
+            <span class="material-symbols-outlined">location_on</span>
+            <span>{{ b.address }}</span>
+          </div>
+          <div class="br-card__info">
+            <div class="br-card__info-item">
+              <span class="br-card__info-icon"><span class="material-symbols-outlined">person</span></span>
+              <div>
+                <p>QUẢN LÝ</p>
+                <p class="strong">{{ b.manager }}</p>
+              </div>
+            </div>
+            <div class="br-card__info-item">
+              <span class="br-card__info-icon"><span class="material-symbols-outlined">package_2</span></span>
+              <div>
+                <p>ĐƠN HÀNG</p>
+                <p class="strong">{{ b.ordersPerMonth }}</p>
+              </div>
+            </div>
+          </div>
+          <div class="br-card__foot">
+            <div>
+              <p>DOANH THU THÁNG NÀY</p>
+              <p class="br-card__revenue">{{ b.revenue }}</p>
+            </div>
+            <div class="br-card__actions">
+              <button type="button" class="icon-btn-outline"><span class="material-symbols-outlined">visibility</span></button>
+              <button type="button" class="icon-btn-solid"><span class="material-symbols-outlined">edit</span></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    } @empty {
+      <div class="br-empty">Không tìm thấy chi nhánh phù hợp.</div>
+    }
+  </div>
+
+  <!-- Pagination -->
+  <div class="br-foot">
+    <span>Hiển thị {{ filteredBranches().length }} trên tổng số {{ totalBranches }} chi nhánh</span>
+    <div class="br-pager">
+      <button type="button" disabled><span class="material-symbols-outlined">chevron_left</span></button>
+      <button type="button" class="active">1</button>
+      <button type="button">2</button>
+      <button type="button">3</button>
+      <span>...</span>
+      <button type="button">6</button>
+      <button type="button"><span class="material-symbols-outlined">chevron_right</span></button>
+    </div>
+  </div>
+</div>

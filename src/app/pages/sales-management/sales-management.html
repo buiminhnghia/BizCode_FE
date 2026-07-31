@@ -1,0 +1,111 @@
+<div class="sm">
+  <header class="sm-header">
+    <div>
+      <h1>Quản lý Bán hàng</h1>
+      <p>Tổng quan hoạt động kinh doanh và hiệu suất bán hàng.</p>
+    </div>
+    <div class="sm-header__actions">
+      <button type="button" class="btn btn-outline"><span class="material-symbols-outlined">download</span> Xuất báo cáo</button>
+      <button type="button" class="btn btn-accent"><span class="material-symbols-outlined">add_shopping_cart</span> Tạo đơn hàng mới</button>
+    </div>
+  </header>
+
+  <!-- Stats -->
+  <div class="sm-stats">
+    @for (s of stats; track s.label) {
+      <div class="card sm-stat-card">
+        <div class="sm-stat-card__row">
+          <span class="sm-stat-card__icon"><span class="material-symbols-outlined">{{ s.icon }}</span></span>
+          <span class="sm-stat-card__note" [class]="s.tone">{{ s.note }}</span>
+        </div>
+        <p>{{ s.label }}</p>
+        <h3>{{ s.value }} <span>{{ s.unit }}</span></h3>
+      </div>
+    }
+  </div>
+
+  <!-- Charts -->
+  <div class="sm-charts">
+    <div class="card sm-revenue-card">
+      <div class="sm-revenue-card__head">
+        <h4>Doanh thu theo thời gian</h4>
+        <select>
+          <option>7 ngày qua</option>
+          <option>30 ngày qua</option>
+          <option>Quý này</option>
+        </select>
+      </div>
+      <div class="sm-revenue-card__bars">
+        @for (b of revenueBars; track b.label) {
+          <div class="sm-bar-col">
+            <div class="sm-bar" [class.current]="b.current" [style.height.%]="b.h"></div>
+            <span [class.current]="b.current">{{ b.label }}</span>
+          </div>
+        }
+      </div>
+    </div>
+
+    <div class="card sm-mix-card">
+      <h4>Cơ cấu sản phẩm bán chạy</h4>
+      <div class="sm-donut-wrap">
+        <div class="sm-donut" [style.background]="donutGradient()">
+          <div class="sm-donut__hole">
+            <strong>{{ totalUnits }}</strong>
+            <span>Total Unit</span>
+          </div>
+        </div>
+      </div>
+      <div class="sm-mix-legend">
+        @for (p of productMix; track p.label) {
+          <div class="sm-mix-legend__row">
+            <span class="dot" [class]="p.tone"></span>
+            <span class="label">{{ p.label }}</span>
+            <span class="pct">{{ p.pct }}%</span>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent orders -->
+  <div class="card sm-table-card">
+    <div class="sm-table-card__head">
+      <h4>Giao dịch gần đây</h4>
+      <a>Xem tất cả <span class="material-symbols-outlined">chevron_right</span></a>
+    </div>
+
+    <div class="sm-table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Order ID</th>
+            <th>Khách hàng</th>
+            <th>Ngày giao dịch</th>
+            <th class="right">Tổng cộng</th>
+            <th class="center">Trạng thái</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (o of recentOrders; track o.id) {
+            <tr>
+              <td class="mono strong">{{ o.code }}</td>
+              <td>
+                <div class="sm-customer-cell">
+                  <span class="sm-customer-cell__avatar">{{ o.initials }}</span>
+                  <span>{{ o.customer }}</span>
+                </div>
+              </td>
+              <td class="muted">{{ o.date }}</td>
+              <td class="right mono strong">{{ o.total }}</td>
+              <td class="center"><span class="status-pill" [class]="o.status">{{ statusLabel[o.status] }}</span></td>
+              <td class="right">
+                <button type="button" class="icon-btn-plain"><span class="material-symbols-outlined">more_vert</span></button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

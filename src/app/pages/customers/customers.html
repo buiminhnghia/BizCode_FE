@@ -1,0 +1,96 @@
+<div class="cu">
+  <header class="cu-header">
+    <div>
+      <h1>Quản lý khách hàng</h1>
+      <p>Xem và quản lý thông tin đối tác của bạn.</p>
+    </div>
+    <div class="cu-header__actions">
+      <button type="button" class="btn btn-outline"><span class="material-symbols-outlined">upload</span> Nhập dữ liệu</button>
+      <button type="button" class="btn btn-primary"><span class="material-symbols-outlined">person_add</span> Thêm khách hàng</button>
+    </div>
+  </header>
+
+  <!-- Toolbar -->
+  <div class="card cu-toolbar">
+    <div class="cu-search">
+      <span class="material-symbols-outlined">search</span>
+      <input
+        type="text"
+        placeholder="Tìm theo tên, email hoặc số điện thoại..."
+        [value]="searchTerm()"
+        (input)="setSearchTerm($any($event.target).value)"
+      />
+    </div>
+    <select [value]="selectedType()" (change)="setType($any($event.target).value)">
+      @for (t of customerTypes; track t) {
+        <option [value]="t">{{ t }}</option>
+      }
+    </select>
+    <select [value]="selectedRegion()" (change)="setRegion($any($event.target).value)">
+      @for (r of regions; track r) {
+        <option [value]="r">{{ r }}</option>
+      }
+    </select>
+    <button type="button" class="icon-btn-outline"><span class="material-symbols-outlined">tune</span></button>
+  </div>
+
+  <!-- Table -->
+  <div class="card cu-table-card">
+    <div class="cu-table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Khách hàng</th>
+            <th>Liên hệ</th>
+            <th>Loại</th>
+            <th>Tổng đơn</th>
+            <th>Tổng chi tiêu</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (c of filteredCustomers(); track c.id) {
+            <tr>
+              <td>
+                <div class="cu-customer-cell">
+                  <span class="cu-customer-cell__avatar">{{ c.initials }}</span>
+                  <div>
+                    <p class="cu-customer-cell__name">{{ c.name }}</p>
+                    <p class="cu-customer-cell__location">{{ c.location }}</p>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <p class="cu-contact__email">{{ c.email }}</p>
+                <p class="cu-contact__phone">{{ c.phone }}</p>
+              </td>
+              <td><span class="type-pill" [class]="typeClass(c.type)">{{ c.type }}</span></td>
+              <td class="mono">{{ c.orders }}</td>
+              <td class="mono strong">{{ c.spend }}</td>
+              <td class="right">
+                <button type="button" class="icon-btn-plain"><span class="material-symbols-outlined">more_vert</span></button>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="6" class="cu-empty">Không tìm thấy khách hàng phù hợp.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="cu-table-card__foot">
+      <span>Hiển thị {{ filteredCustomers().length }} trong tổng số {{ totalCustomers | number }} khách hàng</span>
+      <div class="cu-pager">
+        <button type="button" [disabled]="page() === 1" (click)="goToPage(page() - 1)"><span class="material-symbols-outlined">chevron_left</span></button>
+        @for (p of [1, 2, 3]; track p) {
+          <button type="button" class="cu-pager__num" [class.active]="page() === p" (click)="goToPage(p)">{{ p }}</button>
+        }
+        <span>...</span>
+        <button type="button" class="cu-pager__num" [class.active]="page() === 125" (click)="goToPage(125)">125</button>
+        <button type="button" (click)="goToPage(page() + 1)"><span class="material-symbols-outlined">chevron_right</span></button>
+      </div>
+    </div>
+  </div>
+</div>

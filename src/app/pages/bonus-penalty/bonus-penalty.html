@@ -1,0 +1,138 @@
+<div class="bp">
+  <header class="bp-header">
+    <div>
+      <div class="bp-breadcrumb">
+        <span>Nhân sự</span>
+        <span class="material-symbols-outlined">chevron_right</span>
+        <span class="bp-breadcrumb__current">Thưởng/Phạt</span>
+      </div>
+      <h1>Thưởng &amp; Phạt</h1>
+      <p>Theo dõi hiệu suất và kỷ luật nhân sự tháng 10/2023</p>
+    </div>
+    <div class="bp-header__actions">
+      <button type="button" class="btn btn-outline"><span class="material-symbols-outlined">download</span> Xuất Excel</button>
+      <button type="button" class="btn btn-primary"><span class="material-symbols-outlined">add_circle</span> Thêm bản ghi mới</button>
+    </div>
+  </header>
+
+  <!-- Summary cards -->
+  <div class="bp-summary">
+    <div class="bp-summary-card">
+      <div class="bp-summary-card__row">
+        <span class="bp-summary-card__icon navy"><span class="material-symbols-outlined">payments</span></span>
+        <span class="bp-summary-card__badge positive">{{ summary.bonusChange }}</span>
+      </div>
+      <p class="bp-summary-card__label">Tổng Thưởng Tháng</p>
+      <h3 class="bp-summary-card__value navy">{{ summary.totalBonus }} <span>VNĐ</span></h3>
+      <span class="bp-summary-card__watermark material-symbols-outlined">card_giftcard</span>
+    </div>
+
+    <div class="bp-summary-card">
+      <div class="bp-summary-card__row">
+        <span class="bp-summary-card__icon pink"><span class="material-symbols-outlined">warning_amber</span></span>
+        <span class="bp-summary-card__badge negative">{{ summary.penaltyChange }}</span>
+      </div>
+      <p class="bp-summary-card__label">Tổng Phạt Tháng</p>
+      <h3 class="bp-summary-card__value pink">{{ summary.totalPenalty }} <span>VNĐ</span></h3>
+      <span class="bp-summary-card__watermark material-symbols-outlined">gavel</span>
+    </div>
+
+    <div class="bp-summary-card bp-summary-card--feature">
+      <div class="bp-summary-card__row">
+        <span class="bp-summary-card__icon light"><span class="material-symbols-outlined">star</span></span>
+      </div>
+      <p class="bp-summary-card__label light">Nhân viên xuất sắc</p>
+      <h3 class="bp-summary-card__value light">{{ summary.topEmployee }}</h3>
+      <p class="bp-summary-card__note">{{ summary.topEmployeeNote }}</p>
+      <span class="bp-summary-card__watermark material-symbols-outlined">workspace_premium</span>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div class="card bp-table-card">
+    <div class="bp-table-card__head">
+      <div class="bp-table-card__head-left">
+        <h3>Danh sách chi tiết</h3>
+        <div class="bp-filter">
+          <span>Lọc theo:</span>
+          <select [value]="filterType()" (change)="setFilter($any($event.target).value)">
+            <option value="all">Tất cả các loại</option>
+            <option value="bonus">Thưởng</option>
+            <option value="penalty">Phạt</option>
+          </select>
+        </div>
+      </div>
+      <div class="bp-table-card__head-actions">
+        <button type="button" class="icon-btn-plain"><span class="material-symbols-outlined">filter_list</span></button>
+        <button type="button" class="icon-btn-plain"><span class="material-symbols-outlined">more_vert</span></button>
+      </div>
+    </div>
+
+    <div class="bp-table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Ngày</th>
+            <th>Nhân viên</th>
+            <th>Loại</th>
+            <th>Số tiền</th>
+            <th>Lý do</th>
+            <th>Người duyệt</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (r of filteredRecords(); track r.date + r.name) {
+            <tr>
+              <td class="mono">{{ r.date }}</td>
+              <td>
+                <div class="bp-employee-cell">
+                  <span class="bp-employee-cell__avatar" [class]="r.type">{{ r.initials }}</span>
+                  <div>
+                    <p class="bp-employee-cell__name">{{ r.name }}</p>
+                    <p class="bp-employee-cell__dept">{{ r.dept }}</p>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <span class="type-pill" [class]="r.type">
+                  <span class="material-symbols-outlined">{{ r.type === 'bonus' ? 'add' : 'remove' }}</span>
+                  {{ r.type === 'bonus' ? 'Thưởng' : 'Phạt' }}
+                </span>
+              </td>
+              <td class="mono strong" [class]="r.type">{{ r.amount }}</td>
+              <td class="reason">{{ r.reason }}</td>
+              <td>{{ r.approver }}</td>
+              <td class="right">
+                <button type="button" class="icon-btn-plain"><span class="material-symbols-outlined">edit_note</span></button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="bp-table-card__foot">
+      <span>Hiển thị 1-{{ filteredRecords().length }} của {{ totalRecords }} bản ghi</span>
+      <div class="bp-pager">
+        <button type="button" [disabled]="page() === 1" (click)="goToPage(page() - 1)"><span class="material-symbols-outlined">chevron_left</span></button>
+        @for (p of [1, 2, 3]; track p) {
+          <button type="button" class="bp-pager__num" [class.active]="page() === p" (click)="goToPage(p)">{{ p }}</button>
+        }
+        <button type="button" (click)="goToPage(page() + 1)"><span class="material-symbols-outlined">chevron_right</span></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Insight cards -->
+  <div class="bp-insights">
+    <div class="bp-insight-card bp-insight-card--navy">
+      <h4><span class="material-symbols-outlined">lightbulb</span> Phân tích nhanh</h4>
+      <p>Tỷ lệ nhân viên được khen thưởng tăng 15% so với tháng trước. Bộ phận Kinh doanh đang dẫn đầu về số lượng thưởng đạt KPI.</p>
+    </div>
+    <div class="bp-insight-card bp-insight-card--pink">
+      <h4><span class="material-symbols-outlined">event_repeat</span> Lưu ý quan trọng</h4>
+      <p>Hạn chót duyệt các khoản thưởng/phạt cho kỳ lương tháng 10 là ngày 28/10. Vui lòng kiểm tra các bản ghi đang chờ.</p>
+    </div>
+  </div>
+</div>
