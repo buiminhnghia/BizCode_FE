@@ -1,0 +1,247 @@
+<!-- Hero -->
+<section class="hero">
+  <div class="container hero__grid">
+    <div class="hero__copy">
+      <span class="eyebrow"><span class="material-symbols-outlined">bolt</span> Báo cáo thời gian thực</span>
+      <h1>Quản trị Sản xuất &amp; Vận hành Doanh nghiệp</h1>
+      <p>Nền tảng ERP chuyên sâu tối ưu hóa quy trình từ BOM, lập kế hoạch đến quản lý chất lượng. Kiểm soát toàn diện chuỗi giá trị trong một giao diện duy nhất.</p>
+
+      <div class="hero__actions">
+        <a routerLink="/dang-ky" class="btn btn-accent">Dùng thử miễn phí</a>
+        <a class="btn btn-outline">Xem bản demo <span class="material-symbols-outlined">arrow_forward</span></a>
+      </div>
+
+      <div class="hero__stats">
+        <div class="stat-pill">
+          <span class="stat-pill__label">Hiệu suất Sản xuất</span>
+          <span class="stat-pill__value up">+24.8%</span>
+        </div>
+        <div class="stat-pill">
+          <span class="stat-pill__label">Tỉ lệ Lỗi (Defect Rate)</span>
+          <span class="stat-pill__value down">0.12%</span>
+        </div>
+      </div>
+
+      <div class="hero__partners">
+        <span>Đối tác tin cậy:</span>
+        <strong>TECHHUB</strong>
+        <strong>GLOBALCON</strong>
+        <strong>V-CORP</strong>
+      </div>
+    </div>
+
+    <div class="hero__visual">
+      <div class="browser-frame">
+        <div class="browser-frame__bar">
+          <span></span><span></span><span></span>
+        </div>
+        <div class="browser-frame__body">
+          <div class="mock-line w-60"></div>
+          <div class="mock-line w-40"></div>
+          <div class="mock-chart">
+            <div class="mock-bar" style="--h: 40%"></div>
+            <div class="mock-bar" style="--h: 65%"></div>
+            <div class="mock-bar" style="--h: 50%"></div>
+            <div class="mock-bar" style="--h: 85%"></div>
+            <div class="mock-bar" style="--h: 60%"></div>
+            <div class="mock-bar" style="--h: 92%"></div>
+          </div>
+          <div class="mock-line w-80"></div>
+          <div class="mock-line w-50"></div>
+        </div>
+      </div>
+      <div class="floating-badge">
+        <span class="material-symbols-outlined">trending_up</span>
+        <div>
+          <strong>+128%</strong>
+          <span>Hiệu suất vận hành</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Product deep dive -->
+<section class="section product">
+  <div class="container">
+    <div class="dashboard-mock">
+      <aside class="dashboard-mock__sidebar">
+        <p class="sidebar-title">Menu chức năng</p>
+        <ul>
+          @for (item of sidebarMenu; track item.label) {
+            <li [class.active]="item.active">
+              <span class="material-symbols-outlined">{{ item.icon }}</span>
+              {{ item.label }}
+            </li>
+          }
+        </ul>
+        <p class="sidebar-title">Trạng thái hệ thống</p>
+        <div class="sidebar-status"><span class="dot"></span> Trực tuyến</div>
+      </aside>
+
+      <div class="dashboard-mock__main">
+        <div class="dashboard-mock__header">
+          <div>
+            <h3>Phân hệ Quản lý Sản xuất</h3>
+            <p>Điều hành kế hoạch sản xuất và định mức nguyên vật liệu (BOM) tập trung.</p>
+          </div>
+          <div class="dashboard-mock__header-actions">
+            <button class="btn btn-outline btn-sm"><span class="material-symbols-outlined">download</span> Xuất báo cáo</button>
+            <button class="btn btn-primary btn-sm"><span class="material-symbols-outlined">add</span> Tạo Lệnh SX</button>
+          </div>
+        </div>
+
+        <div class="stat-cards">
+          <div class="stat-card">
+            <span class="stat-card__label">Đang sản xuất</span>
+            <strong class="stat-card__value">124</strong>
+            <span class="stat-card__delta up"><span class="material-symbols-outlined">arrow_upward</span> +8% so hôm qua</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-card__label">Kiểm định lỗi (QC)</span>
+            <strong class="stat-card__value danger">0.08%</strong>
+            <span class="stat-card__delta down"><span class="material-symbols-outlined">arrow_downward</span> Giảm 0.02%</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-card__label">Tiến độ kế hoạch</span>
+            <strong class="stat-card__value">92.4%</strong>
+            <div class="progress"><div class="progress__bar" style="width: 92.4%"></div></div>
+          </div>
+        </div>
+
+        <div class="table-panel">
+          <div class="table-panel__tabs">
+            <span class="tab active">Chi tiết BOM</span>
+            <span class="tab">Lịch trình Sản xuất</span>
+            <span class="tab">Quản lý Chất lượng</span>
+            <div class="table-search">
+              <span class="material-symbols-outlined">search</span>
+              <input type="text" placeholder="Tìm kiếm SKU/Lệnh SX..." />
+            </div>
+          </div>
+
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Mã thành phẩm</th>
+                  <th>Tên linh kiện</th>
+                  <th>Số lượng BOM</th>
+                  <th>Tồn kho khả dụng</th>
+                  <th>Trạng thái</th>
+                  <th>Thao tác</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (row of bomRows; track row.sku) {
+                  <tr>
+                    <td class="mono">{{ row.sku }}</td>
+                    <td>{{ row.name }}</td>
+                    <td>{{ row.qty }}</td>
+                    <td>{{ row.stock }}</td>
+                    <td><span class="status-badge" [class]="row.status">{{ statusLabel[row.status] }}</span></td>
+                    <td class="row-actions">
+                      <span class="material-symbols-outlined">edit</span>
+                      <span class="material-symbols-outlined">visibility</span>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-section">
+      <div class="flow-diagram">
+        <div class="flow-diagram__header">
+          <span class="material-symbols-outlined">hub</span> Luồng Vận hành Hệ thống
+          <span class="live-badge">LIVE</span>
+        </div>
+        <div class="flow-diagram__grid">
+          @for (node of ['Sản xuất','Kho','Bán hàng','Mua hàng','Kế toán','Quản lý Nhóm']; track node) {
+            <div class="flow-node" [class.highlight]="node === 'Sản xuất'">{{ node }}</div>
+          }
+        </div>
+      </div>
+
+      <div class="flow-copy">
+        <h2>Giao diện Phần mềm Chuyên sâu</h2>
+        <p>Được thiết kế cho các nhà quản lý cần dữ liệu tức thì. Mọi module đều được liên kết chặt chẽ thông qua lõi dữ liệu BizCode, đảm bảo tính nhất quán từ khâu nhập kho vật tư cho đến khi hoàn thành đơn hàng.</p>
+
+        <div class="flow-feature">
+          <span class="material-symbols-outlined">device_hub</span>
+          <div>
+            <h4>Đồng bộ đa nền tảng</h4>
+            <p>Dữ liệu sản xuất cập nhật lập tức lên ứng dụng quản lý của CEO.</p>
+          </div>
+        </div>
+        <div class="flow-feature">
+          <span class="material-symbols-outlined">insights</span>
+          <div>
+            <h4>AI Dự báo nhu cầu</h4>
+            <p>Tự động đề xuất lịch mua hàng dựa trên tốc độ sản xuất thực tế.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Trải nghiệm không giới hạn -->
+<section class="section experience" id="trai-nghiem">
+  <div class="container">
+    <div class="section-heading">
+      <h2>Trải nghiệm không giới hạn</h2>
+    </div>
+    <div class="grid-4">
+      @for (card of experienceCards; track card.title) {
+        <div class="feature-card">
+          <div class="feature-card__icon"><span class="material-symbols-outlined">{{ card.icon }}</span></div>
+          <h3>{{ card.title }}</h3>
+          <p>{{ card.desc }}</p>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- Tại sao chọn BizCode -->
+<section class="section why">
+  <div class="container">
+    <div class="section-heading">
+      <h2>Tại sao chọn BizCode?</h2>
+      <p>BizCode không chỉ là một phần mềm, đó là sự đồng hành cùng hành trình phát triển của doanh nghiệp bạn.</p>
+    </div>
+    <div class="grid-4">
+      @for (card of whyCards; track card.title) {
+        <div class="feature-card feature-card--soft">
+          <div class="feature-card__icon"><span class="material-symbols-outlined">{{ card.icon }}</span></div>
+          <h3>{{ card.title }}</h3>
+          <p>{{ card.desc }}</p>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="section cta">
+  <div class="container cta__inner">
+    <div class="cta__copy">
+      <span class="eyebrow eyebrow--light">Giải pháp cao cấp, chi phí phù hợp</span>
+      <h2>Giải pháp toàn diện với chi phí minh bạch?</h2>
+      <p>Chúng tôi hiểu doanh nghiệp cần sự tối ưu về chi phí và thời gian. BizCode mang tới giải pháp thông minh, hiệu quả với mức chi phí hợp lý nhất, không giới hạn thời gian đăng ký sử dụng.</p>
+      <div class="cta__actions">
+        <a routerLink="/bang-gia" class="btn btn-accent">Dùng ngay để nhận ưu đãi</a>
+        <a routerLink="/dich-vu" class="btn btn-outline-light">Xem gói dịch vụ</a>
+      </div>
+    </div>
+    <div class="cta__badge">
+      <span>CHỈ TỪ</span>
+      <strong>1 Triệu</strong>
+      <span>/ tháng</span>
+    </div>
+  </div>
+</section>

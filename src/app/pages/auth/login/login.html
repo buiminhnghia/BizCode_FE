@@ -1,0 +1,95 @@
+<div class="auth-page">
+  <aside class="auth-aside auth-aside--login">
+    <a routerLink="/" class="auth-aside__logo">BizCode</a>
+    <p class="auth-aside__tagline">Hệ sinh thái quản trị doanh nghiệp toàn diện cho kỷ nguyên số. Tối ưu quy trình, tối đa hiệu quả.</p>
+
+    <div class="showcase-card">
+      <div class="showcase-card__screen">
+        <div class="screen-window">
+          <div class="screen-window__bar">
+            <span></span><span></span><span></span>
+          </div>
+          <div class="screen-window__body">
+            <div class="screen-stat">
+              <span>Doanh thu</span>
+              <strong>$1.45M</strong>
+            </div>
+            <div class="screen-stat">
+              <span>Đơn hàng</span>
+              <strong>1,124</strong>
+            </div>
+            <div class="screen-chart">
+              <div class="screen-bar" style="--h:35%"></div>
+              <div class="screen-bar" style="--h:55%"></div>
+              <div class="screen-bar" style="--h:40%"></div>
+              <div class="screen-bar" style="--h:75%"></div>
+              <div class="screen-bar" style="--h:60%"></div>
+              <div class="screen-bar" style="--h:90%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="showcase-card__caption">
+        <h3>Quản trị thông minh</h3>
+        <p>Hơn 5,000+ doanh nghiệp đã tin dùng và tối ưu hóa vận hành cùng BizCode.</p>
+      </div>
+    </div>
+  </aside>
+
+  <main class="auth-main">
+    <div class="auth-form-wrap">
+      <h1>Chào mừng trở lại</h1>
+      <p class="auth-subtitle">Đăng nhập vào tài khoản BizCode của bạn để tiếp tục.</p>
+
+      <form (submit)="onSubmit($event)">
+        <div class="form-group">
+          <label>Email hoặc Tên đăng nhập</label>
+          <div class="input-icon">
+            <span class="material-symbols-outlined">person</span>
+            <input type="text" placeholder="name&#64;company.com" autocomplete="username" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="form-group__row">
+            <label>Mật khẩu</label>
+            <a class="form-link">Quên mật khẩu?</a>
+          </div>
+          <div class="input-icon">
+            <span class="material-symbols-outlined">lock</span>
+            <input [type]="showPassword() ? 'text' : 'password'" placeholder="••••••••" autocomplete="current-password" />
+            <button type="button" class="input-icon__toggle" (click)="togglePassword()">
+              <span class="material-symbols-outlined">{{ showPassword() ? 'visibility_off' : 'visibility' }}</span>
+            </button>
+          </div>
+        </div>
+
+        <label class="checkbox-row">
+          <input type="checkbox" />
+          Ghi nhớ đăng nhập
+        </label>
+
+        <button type="submit" class="btn btn-primary auth-submit">
+          Đăng nhập <span class="material-symbols-outlined">login</span>
+        </button>
+      </form>
+
+      <div class="auth-divider"><span>Hoặc tiếp tục với</span></div>
+
+      <div class="social-row">
+        <button type="button" class="social-btn">
+          <svg viewBox="0 0 24 24" width="18" height="18"><path fill="#4285F4" d="M23.52 12.27c0-.85-.08-1.67-.22-2.45H12v4.64h6.47c-.28 1.5-1.13 2.78-2.4 3.63v3.02h3.89c2.27-2.09 3.56-5.17 3.56-8.84z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.07 7.93-2.9l-3.89-3.02c-1.08.72-2.45 1.15-4.04 1.15-3.11 0-5.74-2.1-6.68-4.92H1.3v3.11C3.26 21.3 7.31 24 12 24z"/><path fill="#FBBC05" d="M5.32 14.31A7.2 7.2 0 0 1 4.94 12c0-.8.14-1.58.38-2.31V6.58H1.3A11.98 11.98 0 0 0 0 12c0 1.93.46 3.76 1.3 5.42l4.02-3.11z"/><path fill="#EA4335" d="M12 4.77c1.77 0 3.35.61 4.6 1.8l3.44-3.44C17.94 1.19 15.24 0 12 0 7.31 0 3.26 2.7 1.3 6.58l4.02 3.11c.94-2.82 3.57-4.92 6.68-4.92z"/></svg>
+          Google
+        </button>
+        <button type="button" class="social-btn">
+          <span class="material-symbols-outlined">apple</span>
+          Apple
+        </button>
+      </div>
+
+      <p class="auth-switch">Bạn chưa có tài khoản? <a routerLink="/dang-ky">Đăng ký ngay <span class="material-symbols-outlined">chevron_right</span></a></p>
+
+      <div class="version-badge"><span class="material-symbols-outlined">verified</span> Phiên bản BizCode 2024 Pro</div>
+    </div>
+  </main>
+</div>

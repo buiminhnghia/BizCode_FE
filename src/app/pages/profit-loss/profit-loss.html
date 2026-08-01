@@ -1,0 +1,137 @@
+<div class="pl">
+  <header class="pl-header">
+    <div>
+      <h1>Quản lý số tiền lãi lỗ</h1>
+      <p>Báo cáo tình hình tài chính doanh nghiệp theo thời gian thực.</p>
+    </div>
+    <div class="pl-header__actions">
+      <div class="pl-period">
+        <span class="material-symbols-outlined">calendar_today</span>
+        <select>
+          <option>Năm nay (2024)</option>
+          <option>Năm trước (2023)</option>
+          <option>Tùy chỉnh khoảng thời gian</option>
+        </select>
+      </div>
+      <button type="button" class="btn btn-outline btn-sm"><span class="material-symbols-outlined">filter_alt</span> Bộ lọc nâng cao</button>
+      <button type="button" class="btn btn-accent btn-sm"><span class="material-symbols-outlined">download</span> Xuất báo cáo</button>
+    </div>
+  </header>
+
+  <!-- Summary cards -->
+  <div class="pl-summary">
+    @for (s of summary; track s.label) {
+      <div class="card pl-summary-card" [class]="s.accent">
+        <p>{{ s.label }}</p>
+        <h3>{{ s.value }}</h3>
+        <div class="pl-summary-card__change" [class]="s.tone">
+          <span class="material-symbols-outlined">trending_up</span>
+          <span>{{ s.change }}</span>
+        </div>
+      </div>
+    }
+  </div>
+
+  <!-- Detail table -->
+  <div class="card pl-table-card">
+    <div class="pl-table-card__head">
+      <h4>Báo cáo chi tiết theo tháng</h4>
+      <div class="pl-table-card__actions">
+        <button type="button" class="icon-btn-outline"><span class="material-symbols-outlined">refresh</span></button>
+        <button type="button" class="icon-btn-outline"><span class="material-symbols-outlined">more_vert</span></button>
+      </div>
+    </div>
+
+    <div class="pl-table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Kỳ kế toán (Tháng/Năm)</th>
+            <th class="right">Doanh thu</th>
+            <th class="right">Giá vốn (COGS)</th>
+            <th class="right">Chi phí vận hành</th>
+            <th class="right">TN/CP Khác</th>
+            <th class="right">LN Ròng</th>
+            <th>Trạng thái</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (r of rows; track r.period) {
+            <tr>
+              <td class="strong">{{ r.period }}</td>
+              <td class="right mono">{{ r.revenue | number }}</td>
+              <td class="right mono muted">{{ r.cogs | number }}</td>
+              <td class="right mono muted">{{ r.opex | number }}</td>
+              <td class="right mono" [class]="r.otherTone">{{ r.other > 0 ? '+' : '' }}{{ r.other | number }}</td>
+              <td class="right mono strong">{{ r.net | number }}</td>
+              <td><span class="status-pill" [class]="r.status"><i></i>{{ statusLabel[r.status] }}</span></td>
+              <td class="right">
+                <button type="button" class="icon-btn-plain"><span class="material-symbols-outlined">visibility</span></button>
+              </td>
+            </tr>
+          }
+        </tbody>
+        <tfoot>
+          <tr>
+            <td class="strong">Tổng cộng (YTD)</td>
+            <td class="right mono strong">{{ totals.revenue | number }}</td>
+            <td class="right mono strong">{{ totals.cogs | number }}</td>
+            <td class="right mono strong">{{ totals.opex | number }}</td>
+            <td class="right mono strong">{{ totals.other | number }}</td>
+            <td class="right mono strong">{{ totals.net | number }}</td>
+            <td colspan="2"></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+
+    <div class="pl-table-card__foot">
+      <span>Hiển thị {{ rows.length }} trong số {{ totalMonths }} tháng</span>
+      <div class="pl-pager">
+        <button type="button" disabled>Trước</button>
+        <button type="button" class="active">1</button>
+        <button type="button">2</button>
+        <button type="button">3</button>
+        <button type="button">Sau</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Insights -->
+  <div class="pl-insights">
+    <div class="card pl-chart-card">
+      <div class="pl-chart-card__head">
+        <div>
+          <h3>Biểu đồ Lợi nhuận (6 tháng)</h3>
+          <p>Xu hướng doanh thu và chi phí thực tế</p>
+        </div>
+        <div class="pl-legend">
+          <span><i class="navy"></i>Doanh thu</span>
+          <span><i class="mauve"></i>Lợi nhuận</span>
+        </div>
+      </div>
+      <div class="pl-chart-card__bars">
+        @for (m of chartMonths; track m.label) {
+          <div class="pl-bar-col">
+            <div class="pl-bar-track">
+              <div class="pl-bar-track__revenue" [style.height.%]="m.revenuePct"></div>
+              <div class="pl-bar-track__profit" [style.height.%]="m.profitPct"></div>
+            </div>
+            <span [class.current]="m.current">{{ m.label }}</span>
+          </div>
+        }
+      </div>
+    </div>
+
+    <div class="pl-ai-card">
+      <span class="pl-ai-card__pattern"></span>
+      <div class="pl-ai-card__body">
+        <span class="pl-ai-card__icon"><span class="material-symbols-outlined">auto_awesome</span></span>
+        <h4>Phân tích chuyên sâu (AI)</h4>
+        <p>{{ aiInsight }}</p>
+      </div>
+      <button type="button" class="pl-ai-card__cta">Xem đề xuất tối ưu <span class="material-symbols-outlined">arrow_forward</span></button>
+    </div>
+  </div>
+</div>

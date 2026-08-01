@@ -1,0 +1,145 @@
+<div class="pr">
+  <header class="pr-header">
+    <div>
+      <div class="pr-breadcrumb">
+        <span>Nhân sự</span>
+        <span class="material-symbols-outlined">chevron_right</span>
+        <span class="pr-breadcrumb__current">Quản lý lương</span>
+      </div>
+      <h1>Bảng Lương Nhân Viên</h1>
+    </div>
+    <div class="pr-header__actions">
+      <button type="button" class="btn btn-outline"><span class="material-symbols-outlined">download</span> Export Payroll</button>
+      <button type="button" class="btn btn-primary"><span class="material-symbols-outlined">payments</span> Phê duyệt hàng loạt</button>
+    </div>
+  </header>
+
+  <!-- Filters + summary -->
+  <div class="pr-toolbar">
+    <div class="card pr-period">
+      <label>Kỳ thanh toán</label>
+      <div class="pr-period__select">
+        <select [value]="period()" (change)="setPeriod($any($event.target).value)">
+          @for (p of periods; track p) {
+            <option [value]="p">{{ p }}</option>
+          }
+        </select>
+        <span class="material-symbols-outlined">calendar_month</span>
+      </div>
+    </div>
+
+    <div class="card pr-summary">
+      <div class="pr-summary__item">
+        <span>Tổng quỹ lương</span>
+        <strong class="navy">{{ summary.total }}</strong>
+      </div>
+      <div class="pr-summary__item">
+        <span>Nhân viên</span>
+        <strong>{{ summary.employees }}</strong>
+      </div>
+      <div class="pr-summary__item">
+        <span>Đã chi trả</span>
+        <strong class="pink">{{ summary.paidRate }}</strong>
+      </div>
+      <div class="pr-summary__actions">
+        <button type="button" class="icon-btn-outline"><span class="material-symbols-outlined">filter_list</span></button>
+        <button type="button" class="icon-btn-outline"><span class="material-symbols-outlined">sort</span></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Payroll table -->
+  <div class="card pr-table-card">
+    <div class="pr-table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Employee</th>
+            <th class="right">Base Salary</th>
+            <th class="right">Allowances</th>
+            <th class="right">Deductions</th>
+            <th class="right">Net Salary</th>
+            <th class="center">Status</th>
+            <th class="center">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of rows; track row.name) {
+            <tr>
+              <td>
+                <div class="pr-employee-cell">
+                  <span class="pr-employee-cell__avatar">{{ row.initials }}</span>
+                  <div>
+                    <p class="pr-employee-cell__name">{{ row.name }}</p>
+                    <p class="pr-employee-cell__role">{{ row.role }}</p>
+                  </div>
+                </div>
+              </td>
+              <td class="right mono">{{ row.base }}</td>
+              <td class="right mono positive">{{ row.allowance }}</td>
+              <td class="right mono negative">{{ row.deduction }}</td>
+              <td class="right mono strong">{{ row.net }}</td>
+              <td class="center">
+                <span class="status-pill" [class]="row.status">
+                  <span class="dot"></span>
+                  {{ statusLabel[row.status] }}
+                </span>
+              </td>
+              <td class="center">
+                <button type="button" class="icon-btn-plain"><span class="material-symbols-outlined">more_vert</span></button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="pr-table-card__foot">
+      <span>Showing 1 to {{ rows.length }} of {{ totalEmployees }} employees</span>
+      <div class="pr-pager">
+        <button type="button" [disabled]="page() === 1" (click)="goToPage(page() - 1)"><span class="material-symbols-outlined">chevron_left</span></button>
+        @for (p of [1, 2, 3]; track p) {
+          <button type="button" class="pr-pager__num" [class.active]="page() === p" (click)="goToPage(p)">{{ p }}</button>
+        }
+        <button type="button" (click)="goToPage(page() + 1)"><span class="material-symbols-outlined">chevron_right</span></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom summary -->
+  <div class="pr-bottom-grid">
+    <div class="pr-trend-card">
+      <h3><span class="material-symbols-outlined">monitoring</span> Xu hướng lương (6 tháng)</h3>
+      <div class="pr-trend-card__bars">
+        @for (b of trendBars; track b.month) {
+          <div class="pr-trend-bar-col">
+            <div class="pr-trend-bar" [class.current]="b.current" [style.height.%]="b.h"></div>
+          </div>
+        }
+      </div>
+      <div class="pr-trend-card__labels">
+        @for (b of trendBars; track b.month) {
+          <span [class.current]="b.current">{{ b.month }}</span>
+        }
+      </div>
+      <span class="pr-trend-card__watermark material-symbols-outlined">payments</span>
+    </div>
+
+    <div class="card pr-breakdown-card">
+      <h3><span class="material-symbols-outlined">analytics</span> Phân bổ chi phí</h3>
+      <div class="pr-breakdown-card__list">
+        @for (c of costBreakdown; track c.label) {
+          <div class="pr-breakdown-row">
+            <div class="pr-breakdown-row__head">
+              <span>{{ c.label }}</span>
+              <strong>{{ c.pct }}%</strong>
+            </div>
+            <div class="pr-breakdown-row__bar">
+              <div [class]="c.tone" [style.width.%]="c.pct"></div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>

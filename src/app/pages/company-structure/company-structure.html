@@ -1,0 +1,141 @@
+<div class="cs">
+  <header class="cs-header">
+    <div>
+      <div class="cs-breadcrumb">
+        <span>Thông tin chung</span>
+        <span class="material-symbols-outlined">chevron_right</span>
+        <span class="cs-breadcrumb__current">Cấu trúc bộ máy</span>
+      </div>
+      <h1>Cấu trúc bộ máy công ty</h1>
+      <p>Minh họa hệ thống phân cấp và sơ đồ tổ chức của BizCode ERP. Quản lý các phòng ban, đội ngũ và mối quan hệ báo cáo trực tiếp.</p>
+    </div>
+    <div class="cs-header__actions">
+      <button type="button" class="btn btn-outline"><span class="material-symbols-outlined">download</span> Xuất file PDF</button>
+      <button type="button" class="btn btn-accent"><span class="material-symbols-outlined">edit</span> Chỉnh sửa sơ đồ</button>
+    </div>
+  </header>
+
+  <!-- Stats -->
+  <div class="cs-stats">
+    @for (s of stats; track s.label) {
+      <div class="cs-stat-card">
+        <p class="cs-stat-card__label">{{ s.label }}</p>
+        <h3 class="cs-stat-card__value" [class]="s.tone">{{ s.value }}</h3>
+        @if (s.tone === 'positive') {
+          <span class="cs-stat-card__note positive"><span class="material-symbols-outlined">trending_up</span> {{ s.note }}</span>
+        } @else {
+          <span class="cs-stat-card__note">{{ s.note }}</span>
+        }
+      </div>
+    }
+  </div>
+
+  <!-- Org chart -->
+  <div class="cs-orgchart">
+    <div class="cs-ceo-wrap">
+      <div class="cs-ceo-card">
+        <span class="cs-ceo-card__avatar">{{ ceo.initials }}</span>
+        <h4>{{ ceo.name }}</h4>
+        <p>{{ ceo.title }}</p>
+        <span class="cs-ceo-card__badge">{{ ceo.badge }}</span>
+      </div>
+      <div class="cs-line-v"></div>
+    </div>
+
+    <div class="cs-connector">
+      <div class="cs-line-h"></div>
+      <div class="cs-connector__drops">
+        <div class="cs-line-v"></div>
+        <div class="cs-line-v"></div>
+        <div class="cs-line-v"></div>
+      </div>
+    </div>
+
+    <div class="cs-dept-grid">
+      @for (d of departments; track d.key) {
+        <div class="cs-dept-card" [class]="d.accent">
+          <div class="cs-dept-card__head">
+            <span class="material-symbols-outlined">{{ d.icon }}</span>
+            <span>{{ d.headcount }} Nhân sự</span>
+          </div>
+          <h5>{{ d.name }}</h5>
+
+          <div class="cs-dept-card__lead">
+            <span class="cs-dept-card__lead-avatar">{{ d.headInitials }}</span>
+            <div>
+              <p>{{ d.headName }}</p>
+              <span>{{ d.headTitle }}</span>
+            </div>
+          </div>
+
+          <ul class="cs-dept-card__teams">
+            @for (t of d.subTeams; track t.label) {
+              <li>
+                <span><span class="material-symbols-outlined">{{ t.icon }}</span> {{ t.label }}</span>
+                <strong>{{ t.count }}</strong>
+              </li>
+            }
+          </ul>
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- Detailed list -->
+  <section class="cs-detail">
+    <div class="cs-detail__head">
+      <h3>Danh sách phòng ban chi tiết</h3>
+      <div class="cs-view-toggle">
+        <button type="button" [class.active]="viewMode() === 'table'" (click)="setViewMode('table')">Bảng biểu</button>
+        <button type="button" [class.active]="viewMode() === 'grid'" (click)="setViewMode('grid')">Lưới</button>
+      </div>
+    </div>
+
+    @if (viewMode() === 'table') {
+      <div class="card cs-table-card">
+        <div class="cs-table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Phòng ban</th>
+                <th>Trưởng bộ phận</th>
+                <th>Nhân sự</th>
+                <th>Ngân sách (Q3)</th>
+                <th>Trạng thái</th>
+                <th class="right">Hành động</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (row of deptRows; track row.name) {
+                <tr>
+                  <td class="strong">{{ row.name }}</td>
+                  <td class="lead-cell"><span class="lead-dot"></span> {{ row.head }}</td>
+                  <td class="mono">{{ row.headcount }}</td>
+                  <td class="mono">{{ row.budget }}</td>
+                  <td><span class="status-pill" [class]="row.status">{{ statusLabel[row.status] }}</span></td>
+                  <td class="right">
+                    <button type="button" class="icon-btn-plain"><span class="material-symbols-outlined">more_vert</span></button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    } @else {
+      <div class="cs-detail-grid">
+        @for (row of deptRows; track row.name) {
+          <div class="card cs-detail-card">
+            <h4>{{ row.name }}</h4>
+            <div class="cs-detail-card__lead"><span class="lead-dot"></span> {{ row.head }}</div>
+            <div class="cs-detail-card__meta">
+              <div><span>Nhân sự</span><strong>{{ row.headcount }}</strong></div>
+              <div><span>Ngân sách</span><strong>{{ row.budget }}</strong></div>
+            </div>
+            <span class="status-pill" [class]="row.status">{{ statusLabel[row.status] }}</span>
+          </div>
+        }
+      </div>
+    }
+  </section>
+</div>

@@ -1,0 +1,106 @@
+<div class="st">
+  <header class="st-header">
+    <div>
+      <h1>Báo cáo tồn kho</h1>
+      <p>Dữ liệu cập nhật theo thời gian thực tại toàn bộ chi nhánh.</p>
+    </div>
+    <button type="button" class="btn btn-primary"><span class="material-symbols-outlined">add</span> Tạo đơn mới</button>
+  </header>
+
+  <!-- Summary -->
+  <div class="st-summary">
+    @for (s of summary; track s.label) {
+      <div class="card st-summary-card">
+        <div class="st-summary-card__row">
+          <span class="st-summary-card__icon" [class]="s.tone"><span class="material-symbols-outlined">{{ s.icon }}</span></span>
+          <span class="st-summary-card__note" [class]="s.tone">{{ s.note }}</span>
+        </div>
+        <p class="st-summary-card__label">{{ s.label }}</p>
+        <h3 [class]="s.tone">{{ s.value }}</h3>
+        <p class="st-summary-card__detail">{{ s.detail }}</p>
+      </div>
+    }
+  </div>
+
+  <!-- Charts row -->
+  <div class="st-charts">
+    <div class="card st-chart-card">
+      <div class="st-chart-card__head">
+        <h4>Phân bổ tồn kho theo ngành hàng</h4>
+        <select>
+          <option>Tất cả chi nhánh</option>
+          <option>Chi nhánh Hà Nội</option>
+          <option>Chi nhánh TP.HCM</option>
+        </select>
+      </div>
+      <div class="st-chart-card__bars">
+        @for (b of categoryBars; track b.label) {
+          <div class="st-bar-col">
+            <div class="st-bar-track">
+              <div class="st-bar" [style.height.%]="b.pct"></div>
+            </div>
+            <span>{{ b.label }}</span>
+          </div>
+        }
+      </div>
+    </div>
+
+    <div class="st-insight-card">
+      <div>
+        <h4>Tối ưu hóa kho</h4>
+        <p>Gợi ý: Chuyển 500 đơn hàng từ kho A sang kho B để giảm 15% chi phí vận hành.</p>
+      </div>
+      <button type="button" class="btn btn-accent">Xử lý ngay</button>
+      <span class="st-insight-card__glow"></span>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div class="card st-table-card">
+    <div class="st-table-card__head">
+      <h4>Chi tiết hàng tồn kho</h4>
+      <div class="st-table-card__actions">
+        <button type="button" class="btn btn-outline btn-sm">Xuất Excel</button>
+        <button type="button" class="btn btn-outline btn-sm">Lọc dữ liệu</button>
+      </div>
+    </div>
+
+    <div class="st-table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>SKU</th>
+            <th>Tên sản phẩm</th>
+            <th>Danh mục</th>
+            <th>Số lượng</th>
+            <th>Đơn giá</th>
+            <th class="right">Trạng thái</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (r of rows; track r.sku) {
+            <tr>
+              <td class="mono">{{ r.sku }}</td>
+              <td class="strong">{{ r.name }}</td>
+              <td>{{ r.category }}</td>
+              <td class="mono strong" [class.danger]="r.status === 'low'">{{ r.qty }}</td>
+              <td class="mono">{{ r.price }}</td>
+              <td class="right"><span class="status-pill" [class]="r.status">{{ statusLabel[r.status] }}</span></td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="st-table-card__foot">
+      <span>Hiển thị {{ rows.length }} trên {{ totalProducts | number }} sản phẩm</span>
+      <div class="st-pager">
+        <button type="button" disabled><span class="material-symbols-outlined">chevron_left</span></button>
+        <button type="button" class="active">1</button>
+        <button type="button">2</button>
+        <button type="button">3</button>
+        <button type="button"><span class="material-symbols-outlined">chevron_right</span></button>
+      </div>
+    </div>
+  </div>
+</div>

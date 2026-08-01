@@ -1,0 +1,48 @@
+<footer class="footer">
+  <div class="container footer__grid">
+    <div class="footer__brand">
+      <span class="logo__mark">Biz<span>Code</span></span>
+      <p>Hệ sinh thái chuyển đổi số toàn diện cho doanh nghiệp SMEs Việt Nam.</p>
+      <div class="footer__social">
+        <a aria-label="Website"><span class="material-symbols-outlined">language</span></a>
+        <a aria-label="Email"><span class="material-symbols-outlined">mail</span></a>
+        <a aria-label="Hotline"><span class="material-symbols-outlined">call</span></a>
+      </div>
+    </div>
+
+    <div class="footer__col">
+      <h4>Sản phẩm</h4>
+      <ul>
+        <li><a>Sản xuất (MES)</a></li>
+        <li><a>Quản lý Kho (WMS)</a></li>
+        <li><a>Tài chính Kế toán</a></li>
+        <li><a>Quản trị Nhân sự</a></li>
+      </ul>
+    </div>
+
+    <div class="footer__col">
+      <h4>Liên kết</h4>
+      <ul>
+        <li><a routerLink="/gioi-thieu">Giới thiệu</a></li>
+        <li><a>Liên hệ</a></li>
+        <li><a>Chính sách bảo mật</a></li>
+        <li><a>Điều khoản sử dụng</a></li>
+      </ul>
+    </div>
+
+    <div class="footer__col footer__newsletter">
+      <h4>Bản tin</h4>
+      <p>Đăng ký nhận cập nhật mới nhất về các giải pháp quản trị doanh nghiệp.</p>
+      <form class="newsletter-form" (submit)="$event.preventDefault()">
+        <input type="email" placeholder="Email của bạn" />
+        <button type="submit" class="btn btn-primary btn-sm">Gửi</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="footer__bottom">
+    <div class="container">
+      &copy; {{ year }} BizCode Ecosystem. All rights reserved.
+    </div>
+  </div>
+</footer>

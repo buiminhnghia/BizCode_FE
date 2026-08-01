@@ -1,0 +1,131 @@
+<!-- Hero -->
+<section class="pricing-hero">
+  <div class="container section-heading">
+    <h1>Giải pháp toàn diện với chi phí minh bạch</h1>
+    <p>Tối ưu hóa vận hành doanh nghiệp với hệ sinh thái BizCode. Chúng tôi cam kết đồng hành cùng sự phát triển bền vững của bạn.</p>
+  </div>
+
+  <div class="container">
+    <div class="price-card">
+      <span class="price-card__ribbon">Phổ biến nhất</span>
+      <span class="price-card__label">Gói doanh nghiệp Standard</span>
+      <div class="price-card__amount">
+        <strong>1.000.000</strong>
+        <span>VND/Tháng</span>
+      </div>
+
+      <ul class="price-card__features">
+        @for (f of features; track f) {
+          <li><span class="material-symbols-outlined">check_circle</span> {{ f }}</li>
+        }
+      </ul>
+
+      <a routerLink="/dang-ky" class="btn btn-primary price-card__cta">Bắt đầu ngay bây giờ</a>
+      <p class="price-card__note">Không cần thẻ tín dụng · Hủy bất kỳ lúc nào</p>
+    </div>
+  </div>
+</section>
+
+<!-- Cam kết vàng -->
+<section class="section commitments">
+  <div class="container">
+    <div class="section-heading">
+      <h2>Cam kết vàng từ BizCode</h2>
+      <p>Sự an tâm của khách hàng là ưu tiên hàng đầu của chúng tôi.</p>
+    </div>
+
+    <div class="grid-3">
+      @for (c of commitments; track c.title) {
+        <div class="feature-card">
+          <div class="feature-card__icon"><span class="material-symbols-outlined">{{ c.icon }}</span></div>
+          <h3>{{ c.title }}</h3>
+          <p>{{ c.desc }}</p>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- Trust banner -->
+<section class="trust-banner">
+  <div class="container trust-banner__grid">
+    <div class="trust-banner__copy">
+      <span class="eyebrow eyebrow--light">Trusted worldwide</span>
+      <h2>Đồng hành cùng hơn 80.000 doanh nghiệp vươn tầm</h2>
+      <p>BizCode tự hào là nền tảng quản trị hàng đầu, giúp các doanh nghiệp trong và ngoài nước chuyển đổi số thành công và tối ưu năng suất lao động.</p>
+
+      <div class="trust-banner__stats">
+        @for (s of customerStats.slice(0, 2); track s.label) {
+          <div>
+            <strong>{{ s.value }}%</strong>
+            <span>{{ s.label === 'Sản xuất' ? 'Lĩnh vực sản xuất' : 'Mạng lưới phân phối' }}</span>
+          </div>
+        }
+      </div>
+    </div>
+
+    <div class="trust-banner__chart">
+      <div class="donut" [style.background]="donutGradient()">
+        <div class="donut__hole">
+          <strong>80K+</strong>
+          <span>Khách hàng</span>
+        </div>
+      </div>
+      <ul class="donut__legend">
+        @for (s of customerStats; track s.label) {
+          <li><span class="dot" [class]="'dot--' + $index"></span> {{ s.label }} <b>{{ s.value }}%</b></li>
+        }
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- Platform features -->
+<section class="section platform">
+  <div class="container">
+    <div class="section-heading">
+      <h2>Nền tảng vận hành tập trung</h2>
+      <p>Thay thế các hệ thống rời rạc bằng một hệ sinh thái duy nhất. Mọi quy trình từ nhân sự, tài chính đến sản xuất đều được kết nối liền mạch.</p>
+    </div>
+
+    <div class="platform__rows">
+      @for (item of platformFeatures; track item.title; let i = $index) {
+        <div class="platform__row" [class.reverse]="i % 2 === 1">
+          <div class="platform__visual">
+            <div class="platform__visual-inner">
+              <span class="material-symbols-outlined">dashboard</span>
+            </div>
+            <p>{{ item.title }}<br /><span>{{ item.caption }}</span></p>
+          </div>
+          <div class="platform__copy">
+            <div class="flow-feature">
+              <span class="material-symbols-outlined">{{ item.icon }}</span>
+              <div>
+                <h4>{{ item.heading }}</h4>
+                <p>{{ item.desc }}</p>
+              </div>
+            </div>
+            @if (i === 1) {
+              <div class="store-badges">
+                <span class="store-badge"><span class="material-symbols-outlined">apps</span> App Store</span>
+                <span class="store-badge"><span class="material-symbols-outlined">android</span> Google Play</span>
+              </div>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="section faq-cta">
+  <div class="container faq-cta__inner">
+    <h2>Bạn còn thắc mắc về các gói dịch vụ?</h2>
+    <p>Đội ngũ tư vấn của BizCode luôn sẵn sàng giải đáp và thiết kế lộ trình chuyển đổi số phù hợp nhất cho quy mô của bạn.</p>
+    <div class="faq-cta__actions">
+      <a routerLink="/dich-vu" class="btn btn-primary">Liên hệ tư vấn ngay</a>
+      <a class="btn btn-outline">Xem tài liệu hướng dẫn</a>
+    </div>
+  </div>
+</section>

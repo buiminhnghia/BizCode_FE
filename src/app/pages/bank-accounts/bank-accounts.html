@@ -1,0 +1,118 @@
+<div class="bk">
+  <header class="bk-header">
+    <div>
+      <div class="bk-breadcrumb">
+        <span>Thông tin chung</span>
+        <span class="material-symbols-outlined">chevron_right</span>
+        <span class="bk-breadcrumb__current">Ngân hàng</span>
+      </div>
+      <h1>Tài khoản ngân hàng doanh nghiệp</h1>
+      <p>Quản lý danh sách các tài khoản ngân hàng liên kết với hệ thống BizCode.</p>
+    </div>
+    <button type="button" class="btn btn-primary">
+      <span class="material-symbols-outlined">add</span> Thêm tài khoản mới
+    </button>
+  </header>
+
+  <!-- Summary cards -->
+  <div class="bk-summary">
+    <div class="card bk-summary__card">
+      <div class="bk-summary__row">
+        <span class="bk-summary__icon"><span class="material-symbols-outlined">account_balance</span></span>
+        <span class="bk-summary__badge positive">Hoạt động</span>
+      </div>
+      <p class="bk-summary__label">Tổng số tài khoản</p>
+      <p class="bk-summary__value">{{ accounts.length.toString().padStart(2, '0') }}</p>
+    </div>
+
+    <div class="card bk-summary__card">
+      <div class="bk-summary__row">
+        <span class="bk-summary__icon bk-summary__icon--pink"><span class="material-symbols-outlined">payments</span></span>
+        <span class="bk-summary__unit">VND</span>
+      </div>
+      <p class="bk-summary__label">Số dư khả dụng (Tổng)</p>
+      <p class="bk-summary__value">1,240,500,000</p>
+    </div>
+
+    <div class="bk-default-card">
+      <span class="material-symbols-outlined bk-default-card__watermark">star</span>
+      <p class="bk-default-card__label">Tài khoản mặc định</p>
+      <p class="bk-default-card__name">{{ defaultAccount()?.bank }} - {{ defaultAccount()?.branch }}</p>
+      <p class="bk-default-card__number">{{ defaultAccount()?.number?.slice(0, 4) }} **** **** {{ defaultAccount()?.number?.slice(-4) }}</p>
+    </div>
+  </div>
+
+  <!-- Account list -->
+  <div class="card bk-list">
+    <div class="bk-list__head">
+      <h3>Danh sách tài khoản</h3>
+      <div class="bk-list__actions">
+        <button type="button" class="icon-btn-outline"><span class="material-symbols-outlined">filter_list</span></button>
+        <button type="button" class="icon-btn-outline"><span class="material-symbols-outlined">download</span></button>
+      </div>
+    </div>
+
+    <div class="bk-table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Ngân hàng &amp; Chi nhánh</th>
+            <th>Số tài khoản</th>
+            <th class="center">Mặc định</th>
+            <th>Trạng thái</th>
+            <th class="right">Thao tác</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (acc of accounts; track acc.id) {
+            <tr>
+              <td>
+                <div class="bk-bank-cell">
+                  <span class="bk-bank-cell__logo">{{ acc.initials }}</span>
+                  <div>
+                    <p class="bk-bank-cell__name">{{ acc.bank }}</p>
+                    <p class="bk-bank-cell__branch">{{ acc.branch }}</p>
+                  </div>
+                </div>
+              </td>
+              <td class="mono">{{ acc.number }}</td>
+              <td class="center">
+                <label class="switch">
+                  <input type="checkbox" [checked]="defaultAccountId() === acc.id" (change)="setDefault(acc.id)" />
+                  <span class="switch__track"></span>
+                </label>
+              </td>
+              <td>
+                <span class="status-dot" [class]="acc.status">
+                  <span class="dot"></span>
+                  {{ acc.status === 'connected' ? 'Kết nối' : 'Đang chờ' }}
+                </span>
+              </td>
+              <td class="right">
+                <button type="button" class="icon-btn-plain"><span class="material-symbols-outlined">more_vert</span></button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Guidance -->
+  <div class="bk-guidance">
+    <div class="bk-guidance__card bk-guidance__card--navy">
+      <h4><span class="material-symbols-outlined">info</span> Lưu ý về tài khoản mặc định</h4>
+      <p>Tài khoản mặc định sẽ được ưu tiên sử dụng trong các giao dịch tự động, thanh toán lương và xuất hóa đơn nếu không có chỉ định cụ thể khác.</p>
+      <a>Tìm hiểu thêm về quy trình xác thực <span class="material-symbols-outlined">open_in_new</span></a>
+    </div>
+    <div class="bk-guidance__card bk-guidance__card--pink">
+      <h4><span class="material-symbols-outlined">security</span> Bảo mật dữ liệu ngân hàng</h4>
+      <p>BizCode cam kết bảo mật thông tin tài khoản theo tiêu chuẩn PCI DSS. Mọi kết nối với ngân hàng đều được mã hóa đầu cuối 256-bit.</p>
+      <div class="bk-guidance__badges">
+        <span class="bk-guidance__badge">AES-256</span>
+        <span class="bk-guidance__badge">PCI DSS</span>
+        <span class="bk-guidance__badge">ISO 27001</span>
+      </div>
+    </div>
+  </div>
+</div>

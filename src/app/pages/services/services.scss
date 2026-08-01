@@ -1,0 +1,244 @@
+/* ---------- Hero ---------- */
+.services-hero {
+  background: var(--navy-900);
+  color: #fff;
+  padding: 88px 0;
+  text-align: center;
+
+  h1 {
+    font-size: 38px;
+    font-weight: 800;
+    margin: 16px 0 16px;
+  }
+
+  p {
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.7;
+    max-width: 620px;
+    margin: 0 auto;
+  }
+}
+
+.eyebrow--light {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+/* ---------- Service cards ---------- */
+.grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  @media (max-width: 560px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.service-card {
+  background: #fff;
+  border: 1px solid var(--border-200);
+  border-radius: var(--radius-md);
+  padding: 26px 22px;
+  display: flex;
+  flex-direction: column;
+
+  &__icon {
+    width: 46px;
+    height: 46px;
+    border-radius: var(--radius-sm);
+    background: var(--pink-100);
+    color: var(--pink-600);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+  }
+
+  h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-900);
+    margin-bottom: 8px;
+  }
+
+  > p {
+    font-size: 13.5px;
+    color: var(--text-500);
+    line-height: 1.6;
+    margin-bottom: 16px;
+  }
+
+  ul {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--text-700);
+    font-weight: 500;
+
+    .material-symbols-outlined {
+      font-size: 16px;
+      color: var(--green-600);
+    }
+  }
+
+  &__link {
+    margin-top: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--navy-800);
+
+    .material-symbols-outlined {
+      font-size: 16px;
+    }
+
+    &:hover {
+      color: var(--pink-600);
+    }
+  }
+}
+
+/* ---------- Process timeline ---------- */
+.process {
+  background: var(--bg-soft);
+}
+
+.process__heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-bottom: 48px;
+
+  h2 {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--text-900);
+    margin-bottom: 10px;
+  }
+
+  p {
+    font-size: 14.5px;
+    color: var(--text-500);
+    max-width: 480px;
+    line-height: 1.6;
+  }
+}
+
+.timeline {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  position: relative;
+
+  @media (max-width: 800px) {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.timeline__item {
+  background: #fff;
+  border: 1px solid var(--border-200);
+  border-radius: var(--radius-md);
+  padding: 24px 20px;
+}
+
+.timeline__no {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-sm);
+  background: var(--navy-900);
+  color: #fff;
+  font-weight: 800;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.timeline__item h4 {
+  font-size: 15.5px;
+  font-weight: 700;
+  color: var(--text-900);
+  margin-bottom: 8px;
+}
+
+.timeline__item p {
+  font-size: 13.5px;
+  color: var(--text-500);
+  line-height: 1.6;
+}
+
+/* ---------- CTA ---------- */
+.services-cta__inner {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 0;
+  background: var(--navy-900);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+
+  @media (max-width: 800px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.services-cta__visual {
+  background: linear-gradient(160deg, var(--navy-700), var(--navy-900));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 220px;
+
+  .material-symbols-outlined {
+    font-size: 96px;
+    color: rgba(255, 255, 255, 0.25);
+  }
+}
+
+.services-cta__copy {
+  padding: 48px;
+  color: #fff;
+
+  h2 {
+    font-size: 28px;
+    font-weight: 800;
+    margin-bottom: 14px;
+  }
+
+  p {
+    font-size: 15px;
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.7;
+    max-width: 480px;
+  }
+}
+
+.services-cta__actions {
+  display: flex;
+  gap: 14px;
+  margin-top: 28px;
+  flex-wrap: wrap;
+}

@@ -1,0 +1,125 @@
+<div class="pf">
+  <header class="pf-header">
+    <div>
+      <h1>Quản lý lợi nhuận</h1>
+      <p>Phân tích hiệu quả tài chính và tăng trưởng định kỳ.</p>
+    </div>
+    <div class="pf-header__actions">
+      <div class="pf-period">
+        <button type="button" [class.active]="period() === 'month'" (click)="setPeriod('month')">Tháng</button>
+        <button type="button" [class.active]="period() === 'quarter'" (click)="setPeriod('quarter')">Quý</button>
+        <button type="button" [class.active]="period() === 'year'" (click)="setPeriod('year')">Năm</button>
+      </div>
+      <button type="button" class="btn btn-accent"><span class="material-symbols-outlined">file_download</span> Xuất báo cáo</button>
+    </div>
+  </header>
+
+  <!-- KPI cards -->
+  <div class="pf-kpis">
+    @for (k of kpis; track k.label) {
+      <div class="card pf-kpi-card">
+        <div class="pf-kpi-card__row">
+          <span class="pf-kpi-card__icon" [class]="k.tone"><span class="material-symbols-outlined">{{ k.icon }}</span></span>
+          <span class="pf-kpi-card__change" [class.negative]="k.tone === 'red'">
+            <span class="material-symbols-outlined">trending_up</span>{{ k.change }}
+          </span>
+        </div>
+        <p class="pf-kpi-card__label">{{ k.label }}</p>
+        <h3>{{ k.value }}</h3>
+        <p class="pf-kpi-card__note">{{ k.note }}</p>
+      </div>
+    }
+  </div>
+
+  <!-- Charts row -->
+  <div class="pf-charts">
+    <div class="card pf-growth-card">
+      <div class="pf-growth-card__head">
+        <h4>Biểu đồ tăng trưởng lợi nhuận</h4>
+        <div class="pf-legend">
+          <span><i class="navy"></i>Doanh thu</span>
+        </div>
+      </div>
+      <div class="pf-growth-card__bars">
+        @for (b of monthBars; track b.label) {
+          <div class="pf-bar-col">
+            <span class="pf-bar-col__value">{{ b.value }}</span>
+            <div class="pf-bar-track">
+              <div class="pf-bar" [style.height.%]="b.pct"></div>
+            </div>
+            <span class="pf-bar-col__label">{{ b.label }}</span>
+          </div>
+        }
+      </div>
+    </div>
+
+    <div class="card pf-cost-card">
+      <h4>Cơ cấu chi phí</h4>
+      <div class="pf-cost-card__list">
+        @for (c of costShares; track c.label) {
+          <div class="pf-cost-row">
+            <div class="pf-cost-row__head">
+              <span>{{ c.label }}</span>
+              <span>{{ c.pct }}%</span>
+            </div>
+            <div class="pf-cost-row__track">
+              <div class="pf-cost-row__fill" [class]="c.tone" [style.width.%]="c.pct"></div>
+            </div>
+          </div>
+        }
+      </div>
+      <div class="pf-cost-card__quote">
+        <p>"Chi phí vận hành tăng nhẹ so với quý trước do đầu tư vào hạ tầng đám mây mới."</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div class="card pf-table-card">
+    <div class="pf-table-card__head">
+      <h4>Chi tiết báo cáo tài chính</h4>
+      <div class="pf-table-card__actions">
+        <button type="button" class="icon-btn-outline"><span class="material-symbols-outlined">filter_list</span></button>
+        <button type="button" class="icon-btn-outline"><span class="material-symbols-outlined">more_vert</span></button>
+      </div>
+    </div>
+
+    <div class="pf-table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Giai đoạn</th>
+            <th class="right">Doanh thu</th>
+            <th class="right">Giá vốn (COGS)</th>
+            <th class="right">Chi phí vận hành</th>
+            <th class="right">Lợi nhuận ròng</th>
+            <th class="center">Trạng thái</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (r of rows; track r.period) {
+            <tr>
+              <td class="strong">{{ r.period }}</td>
+              <td class="right mono">{{ r.revenue | number }}</td>
+              <td class="right mono">{{ r.cogs | number }}</td>
+              <td class="right mono">{{ r.opex | number }}</td>
+              <td class="right mono strong positive">{{ r.netProfit | number }}</td>
+              <td class="center"><span class="status-pill done">{{ statusLabel[r.status] }}</span></td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="pf-table-card__foot">
+      <span>Hiển thị {{ rows.length }} trên {{ totalReports }} bản ghi</span>
+      <div class="pf-pager">
+        <button type="button" disabled><span class="material-symbols-outlined">chevron_left</span></button>
+        <button type="button" class="active">1</button>
+        <button type="button">2</button>
+        <button type="button">3</button>
+        <button type="button"><span class="material-symbols-outlined">chevron_right</span></button>
+      </div>
+    </div>
+  </div>
+</div>

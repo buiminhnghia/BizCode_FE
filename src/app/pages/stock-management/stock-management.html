@@ -1,0 +1,158 @@
+<div class="sk">
+  <header class="sk-header">
+    <div>
+      <h1>Quản lý hàng tồn kho</h1>
+      <div class="sk-breadcrumb">
+        <span>Kho hàng</span>
+        <span class="material-symbols-outlined">chevron_right</span>
+        <span class="sk-breadcrumb__current">Danh sách tồn kho</span>
+      </div>
+    </div>
+    <div class="sk-header__actions">
+      <button type="button" class="btn btn-outline"><span class="material-symbols-outlined">upload_file</span> Xuất báo cáo</button>
+      <button type="button" class="btn btn-primary"><span class="material-symbols-outlined">add_circle</span> Điều chỉnh kho</button>
+    </div>
+  </header>
+
+  <!-- Stats -->
+  <div class="sk-stats">
+    <div class="card sk-stat-card">
+      <div class="sk-stat-card__row">
+        <span class="sk-stat-card__icon navy"><span class="material-symbols-outlined">payments</span></span>
+        <span class="sk-stat-card__note positive"><span class="material-symbols-outlined">trending_up</span> +12%</span>
+      </div>
+      <p>Tổng giá trị tồn kho</p>
+      <h3>{{ summary.totalValue }} <span>VND</span></h3>
+    </div>
+
+    <div class="card sk-stat-card">
+      <div class="sk-stat-card__row">
+        <span class="sk-stat-card__icon pink"><span class="material-symbols-outlined">inventory</span></span>
+      </div>
+      <p>Tổng số lượng SKU</p>
+      <h3>{{ summary.totalSku }} <span>Mã</span></h3>
+    </div>
+
+    <div class="card sk-stat-card">
+      <div class="sk-stat-card__row">
+        <span class="sk-stat-card__icon gray"><span class="material-symbols-outlined">local_shipping</span></span>
+        <span class="sk-stat-card__note warning"><span class="material-symbols-outlined">schedule</span> Đang giao</span>
+      </div>
+      <p>Hàng đang luân chuyển</p>
+      <h3>{{ summary.inTransit }} <span>Đơn vị</span></h3>
+    </div>
+
+    <div class="card sk-stat-card">
+      <div class="sk-stat-card__row">
+        <span class="sk-stat-card__icon navy"><span class="material-symbols-outlined">pie_chart</span></span>
+      </div>
+      <p>Kho còn trống (%)</p>
+      <div class="sk-stat-card__progress">
+        <h3>{{ summary.emptySpacePct }}%</h3>
+        <div class="sk-progress-track"><div class="sk-progress-bar" [style.width.%]="100 - summary.emptySpacePct"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="card sk-filters">
+    <div class="sk-filters__field">
+      <span class="material-symbols-outlined">store</span>
+      <select>
+        <option>Tất cả chi nhánh</option>
+        <option>Kho Miền Bắc</option>
+        <option>Kho Miền Nam</option>
+      </select>
+    </div>
+    <div class="sk-filters__field">
+      <span class="material-symbols-outlined">category</span>
+      <select [value]="selectedCategory()" (change)="setCategory($any($event.target).value)">
+        @for (c of categories; track c) {
+          <option [value]="c">{{ c }}</option>
+        }
+      </select>
+    </div>
+    <div class="sk-filters__field">
+      <span class="material-symbols-outlined">emergency_home</span>
+      <select [value]="selectedStatus()" (change)="setStatus($any($event.target).value)">
+        @for (s of statuses; track s.value) {
+          <option [value]="s.value">{{ s.label }}</option>
+        }
+      </select>
+    </div>
+    <div class="sk-filters__sort">
+      <span>Sắp xếp theo:</span>
+      <select>
+        <option>Mới nhất</option>
+        <option>Tên sản phẩm</option>
+        <option>Số lượng giảm dần</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div class="card sk-table-card">
+    <div class="sk-table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>SKU/Mã SP</th>
+            <th>Sản phẩm</th>
+            <th>Vị trí</th>
+            <th>Thực tế</th>
+            <th>Khả dụng</th>
+            <th>ĐVT</th>
+            <th class="center">Trạng thái</th>
+            <th class="right">Thao tác</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (i of filteredItems(); track i.sku) {
+            <tr>
+              <td class="mono strong">{{ i.sku }}</td>
+              <td>
+                <div class="sk-product-cell">
+                  <span class="sk-product-cell__icon"><span class="material-symbols-outlined">{{ i.icon }}</span></span>
+                  <div>
+                    <p class="sk-product-cell__name">{{ i.name }}</p>
+                    <p class="sk-product-cell__tag">{{ i.tag }}</p>
+                  </div>
+                </div>
+              </td>
+              <td>{{ i.location }}</td>
+              <td class="mono">{{ i.actual }}</td>
+              <td class="mono">{{ i.available }}</td>
+              <td>{{ i.unit }}</td>
+              <td class="center"><span class="status-pill" [class]="i.status">{{ statusLabel[i.status] }}</span></td>
+              <td class="right">
+                <div class="sk-row-actions">
+                  <button type="button" class="icon-btn-plain"><span class="material-symbols-outlined">edit</span></button>
+                  <button type="button" class="icon-btn-plain"><span class="material-symbols-outlined">history</span></button>
+                </div>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="8" class="sk-empty">Không tìm thấy sản phẩm phù hợp.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sk-table-card__foot">
+      <span>Hiển thị {{ filteredItems().length }} trên {{ totalRecords | number }} mã hàng</span>
+      <div class="sk-pager">
+        <button type="button" [disabled]="page() === 1" (click)="goToPage(1)"><span class="material-symbols-outlined">first_page</span></button>
+        <button type="button" [disabled]="page() === 1" (click)="goToPage(page() - 1)"><span class="material-symbols-outlined">chevron_left</span></button>
+        @for (p of [1, 2, 3]; track p) {
+          <button type="button" class="sk-pager__num" [class.active]="page() === p" (click)="goToPage(p)">{{ p }}</button>
+        }
+        <span>...</span>
+        <button type="button" class="sk-pager__num" [class.active]="page() === 115" (click)="goToPage(115)">115</button>
+        <button type="button" (click)="goToPage(page() + 1)"><span class="material-symbols-outlined">chevron_right</span></button>
+        <button type="button" (click)="goToPage(115)"><span class="material-symbols-outlined">last_page</span></button>
+      </div>
+    </div>
+  </div>
+</div>

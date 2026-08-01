@@ -1,0 +1,110 @@
+<div class="auth-page">
+  <aside class="auth-aside auth-aside--register">
+    <a routerLink="/" class="auth-aside__logo">
+      <span class="logo-mark"></span> BizCode
+    </a>
+
+    <div class="auth-aside__spacer"></div>
+
+    <h2 class="auth-aside__heading">
+      Nền tảng quản trị<br />
+      <span class="accent">doanh nghiệp tập trung.</span>
+    </h2>
+    <p class="auth-aside__tagline">Hợp nhất quy trình, tối ưu nguồn lực và thúc đẩy tăng trưởng vượt bậc với hệ sinh thái giải pháp BizCode.</p>
+
+    <div class="trust-row">
+      <div class="avatar-stack">
+        <span></span><span></span><span>+1k</span>
+      </div>
+      <span class="trust-row__label">Tin dùng bởi doanh nghiệp Việt</span>
+    </div>
+
+    <p class="auth-aside__copyright">&copy; {{ year }} BizCode Ecosystem. All rights reserved.</p>
+  </aside>
+
+  <main class="auth-main">
+    <div class="auth-form-wrap">
+      <h1>Bắt đầu hành trình</h1>
+      <p class="auth-subtitle">Nhập thông tin bên dưới để khởi tạo tài khoản miễn phí.</p>
+
+      <form (submit)="onSubmit($event)">
+        <div class="form-group">
+          <label>Họ và tên</label>
+          <div class="input-icon">
+            <span class="material-symbols-outlined">person</span>
+            <input type="text" placeholder="Nguyễn Văn A" autocomplete="name" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Email doanh nghiệp</label>
+          <div class="input-icon">
+            <span class="material-symbols-outlined">mail</span>
+            <input type="email" placeholder="name&#64;company.com" autocomplete="email" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Số điện thoại</label>
+          <div class="input-icon">
+            <span class="material-symbols-outlined">call</span>
+            <input type="tel" placeholder="09xx xxx xxx" autocomplete="tel" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Mật khẩu</label>
+          <div class="input-icon">
+            <span class="material-symbols-outlined">lock</span>
+            <input [type]="showPassword() ? 'text' : 'password'" placeholder="••••••••" autocomplete="new-password" />
+            <button type="button" class="input-icon__toggle" (click)="togglePassword()">
+              <span class="material-symbols-outlined">{{ showPassword() ? 'visibility_off' : 'visibility' }}</span>
+            </button>
+          </div>
+          <p class="field-hint">Mật khẩu tối thiểu 8 ký tự, bao gồm chữ hoa và số.</p>
+        </div>
+
+        <label class="checkbox-row checkbox-row--terms">
+          <input type="checkbox" />
+          <span>Tôi đồng ý với <a>Điều khoản Dịch vụ</a> và <a>Chính sách Bảo mật</a> của BizCode.</span>
+        </label>
+
+        <button type="submit" class="btn btn-primary auth-submit">Đăng ký tài khoản</button>
+      </form>
+
+      <div class="auth-divider"><span>Hoặc đăng ký với</span></div>
+
+      <div class="social-row">
+        <button type="button" class="social-btn">
+          <svg viewBox="0 0 24 24" width="18" height="18"><path fill="#4285F4" d="M23.52 12.27c0-.85-.08-1.67-.22-2.45H12v4.64h6.47c-.28 1.5-1.13 2.78-2.4 3.63v3.02h3.89c2.27-2.09 3.56-5.17 3.56-8.84z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.07 7.93-2.9l-3.89-3.02c-1.08.72-2.45 1.15-4.04 1.15-3.11 0-5.74-2.1-6.68-4.92H1.3v3.11C3.26 21.3 7.31 24 12 24z"/><path fill="#FBBC05" d="M5.32 14.31A7.2 7.2 0 0 1 4.94 12c0-.8.14-1.58.38-2.31V6.58H1.3A11.98 11.98 0 0 0 0 12c0 1.93.46 3.76 1.3 5.42l4.02-3.11z"/><path fill="#EA4335" d="M12 4.77c1.77 0 3.35.61 4.6 1.8l3.44-3.44C17.94 1.19 15.24 0 12 0 7.31 0 3.26 2.7 1.3 6.58l4.02 3.11c.94-2.82 3.57-4.92 6.68-4.92z"/></svg>
+          Google
+        </button>
+        <button type="button" class="social-btn">
+          <span class="material-symbols-outlined">apple</span>
+          Apple
+        </button>
+      </div>
+
+      <a class="trial-banner">
+        <span class="material-symbols-outlined">bolt</span>
+        Dùng thử BizCode Miễn Phí 14 Ngày
+        <span class="material-symbols-outlined">chevron_right</span>
+      </a>
+
+      <p class="auth-switch">Đã có tài khoản? <a routerLink="/dang-nhap">Đăng nhập</a></p>
+    </div>
+  </main>
+
+  @if (showVerifyModal()) {
+    <div class="modal-backdrop" (click)="closeModal()">
+      <div class="modal-card" (click)="$event.stopPropagation()">
+        <div class="modal-card__icon"><span class="material-symbols-outlined">mark_email_unread</span></div>
+        <h2>Xác thực tài khoản</h2>
+        <p>Một liên kết xác nhận đã được gửi đến email của bạn. Vui lòng kiểm tra hộp thư (bao gồm cả thư rác) để hoàn tất đăng ký.</p>
+        <a href="https://mail.google.com" target="_blank" rel="noopener" class="btn btn-primary modal-card__cta">Mở Gmail</a>
+        <button type="button" class="modal-card__resend">Gửi lại mã</button>
+        <p class="modal-card__redirect-hint">Đang chuyển vào hệ thống BizCode...</p>
+      </div>
+    </div>
+  }
+</div>

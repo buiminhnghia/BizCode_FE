@@ -1,0 +1,73 @@
+<!-- Hero -->
+<section class="services-hero">
+  <div class="container">
+    <span class="eyebrow eyebrow--light">Hệ sinh thái BizCode</span>
+    <h1>Giải pháp Dịch vụ Toàn diện</h1>
+    <p>Chúng tôi đồng hành cùng doanh nghiệp trong hành trình tối ưu hóa quy trình vận hành và bứt phá doanh thu với đội ngũ chuyên gia hàng đầu.</p>
+  </div>
+</section>
+
+<!-- Service cards -->
+<section class="section services-list">
+  <div class="container">
+    <div class="section-heading">
+      <h2>Các gói dịch vụ tiêu biểu</h2>
+    </div>
+
+    <div class="grid-4">
+      @for (s of serviceCards; track s.title) {
+        <div class="service-card">
+          <div class="service-card__icon"><span class="material-symbols-outlined">{{ s.icon }}</span></div>
+          <h3>{{ s.title }}</h3>
+          <p>{{ s.desc }}</p>
+          <ul>
+            @for (b of s.bullets; track b) {
+              <li><span class="material-symbols-outlined">check</span> {{ b }}</li>
+            }
+          </ul>
+          <a class="service-card__link">{{ s.cta }} <span class="material-symbols-outlined">arrow_forward</span></a>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- Process timeline -->
+<section class="section process">
+  <div class="container">
+    <div class="process__heading">
+      <div>
+        <h2>Quy trình triển khai dịch vụ</h2>
+        <p>Chúng tôi áp dụng quy trình chuẩn quốc tế, đảm bảo sự minh bạch và hiệu quả cao nhất cho đối tác.</p>
+      </div>
+      <a class="btn btn-outline"><span class="material-symbols-outlined">download</span> Tải Brochure quy trình</a>
+    </div>
+
+    <div class="timeline">
+      @for (step of steps; track step.no) {
+        <div class="timeline__item">
+          <div class="timeline__no">{{ step.no }}</div>
+          <h4>{{ step.title }}</h4>
+          <p>{{ step.desc }}</p>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="section services-cta">
+  <div class="container services-cta__inner">
+    <div class="services-cta__visual">
+      <span class="material-symbols-outlined">apartment</span>
+    </div>
+    <div class="services-cta__copy">
+      <h2>Sẵn sàng để bứt phá cùng BizCode?</h2>
+      <p>Đừng để rào cản công nghệ kìm hãm sự phát triển của bạn. Hãy để chúng tôi đồng hành cùng bạn trên con đường số hóa.</p>
+      <div class="services-cta__actions">
+        <a class="btn btn-accent">Liên hệ Tư vấn ngay</a>
+        <a routerLink="/bang-gia" class="btn btn-outline-light">Xem bảng giá dịch vụ</a>
+      </div>
+    </div>
+  </div>
+</section>

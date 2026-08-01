@@ -1,0 +1,107 @@
+<!-- Hero -->
+<section class="about-hero">
+  <div class="container about-hero__grid">
+    <div class="about-hero__copy">
+      <span class="eyebrow">Hành trình BizCode</span>
+      <h1>Số hóa tương lai<br />Quản trị doanh nghiệp</h1>
+      <p>Khởi đầu từ khát vọng giải quyết sự cồng kềnh trong vận hành, BizCode đã trở thành hệ sinh thái công nghệ hàng đầu, giúp hàng chục ngàn doanh nghiệp bứt phá trong nguyên số.</p>
+      <a class="btn btn-primary">Tìm hiểu thêm <span class="material-symbols-outlined">arrow_downward</span></a>
+    </div>
+
+    <div class="about-hero__visual">
+      <div class="about-hero__photo">
+        <span class="material-symbols-outlined">groups</span>
+      </div>
+      <div class="location-badge">
+        <span class="material-symbols-outlined">location_on</span>
+        <div>
+          <strong>Trụ sở chính</strong>
+          <span>Hà Nội &amp; TP. HCM</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Stats -->
+<section class="stats-banner">
+  <div class="container stats-banner__grid">
+    @for (s of stats; track s.label) {
+      <div class="stats-banner__item">
+        <strong>{{ s.value }}</strong>
+        <span>{{ s.label }}</span>
+      </div>
+    }
+  </div>
+</section>
+
+<!-- Vision / Mission -->
+<section class="section vision">
+  <div class="container grid-2">
+    <div class="vision-card">
+      <div class="vision-card__icon"><span class="material-symbols-outlined">visibility</span></div>
+      <h3>Tầm nhìn chiến lược</h3>
+      <p>Trở thành hệ sinh thái công nghệ hàng đầu tại Việt Nam và vươn tầm Đông Nam Á, cung cấp bộ công cụ quản trị thông minh, linh hoạt, xóa bỏ mọi rào cản về hạ tầng công nghệ.</p>
+    </div>
+    <div class="vision-card vision-card--accent">
+      <div class="vision-card__icon"><span class="material-symbols-outlined">rocket_launch</span></div>
+      <h3>Sứ mệnh</h3>
+      <p>BizCode cam kết đơn giản hóa việc quản trị phức tạp, mang lại hiệu suất tối đa cho doanh nghiệp thông qua các giải pháp phần mềm tối ưu hóa quy trình và dữ liệu.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Core values -->
+<section class="section core-values">
+  <div class="container core-values__grid">
+    <div class="core-values__list">
+      <div class="section-heading section-heading--left">
+        <h2>Giá trị cốt lõi</h2>
+      </div>
+      @for (v of coreValues; track v.title) {
+        <div class="value-item">
+          <div class="value-item__icon"><span class="material-symbols-outlined">{{ v.icon }}</span></div>
+          <div>
+            <h4>{{ v.title }}</h4>
+            <p>{{ v.desc }}</p>
+          </div>
+        </div>
+      }
+    </div>
+    <div class="core-values__visual">
+      <span class="material-symbols-outlined">diversity_3</span>
+    </div>
+  </div>
+</section>
+
+<!-- Team -->
+<section class="section team">
+  <div class="container">
+    <div class="section-heading">
+      <span class="eyebrow">Đội ngũ BizCode</span>
+      <h2>Những chuyên gia hàng đầu</h2>
+    </div>
+
+    <div class="grid-4">
+      @for (m of team; track m.name) {
+        <div class="team-card">
+          <div class="team-card__avatar">{{ initials(m.name) }}</div>
+          <h4>{{ m.name }}</h4>
+          <span>{{ m.role }}</span>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="section about-cta">
+  <div class="container about-cta__inner">
+    <h2>Sẵn sàng để bắt đầu hành trình mới?</h2>
+    <p>Gia nhập cùng 80.000+ doanh nghiệp đã tin tưởng lựa chọn BizCode cho sự phát triển bền vững.</p>
+    <div class="about-cta__actions">
+      <a class="btn btn-accent">Bắt đầu miễn phí ngay</a>
+      <a class="btn btn-outline-light">Liên hệ tư vấn</a>
+    </div>
+  </div>
+</section>

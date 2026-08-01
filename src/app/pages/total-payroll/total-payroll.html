@@ -1,0 +1,132 @@
+<div class="tp">
+  <header class="tp-header">
+    <div>
+      <h1>Tổng Lương Nhân Viên</h1>
+      <p>Kỳ lương: {{ payPeriod }} • Trạng thái: <span class="badge-status">Chưa thanh toán</span></p>
+    </div>
+    <div class="tp-header__actions">
+      <button type="button" class="btn btn-outline"><span class="material-symbols-outlined">download</span> Xuất báo cáo (CSV)</button>
+      <button type="button" class="btn btn-primary"><span class="material-symbols-outlined">payments</span> Thanh toán toàn bộ</button>
+    </div>
+  </header>
+
+  <!-- Stats -->
+  <div class="tp-stats">
+    @for (s of stats; track s.label) {
+      <div class="card tp-stat-card" [class]="s.accent">
+        <div class="tp-stat-card__row">
+          <span class="tp-stat-card__label">{{ s.label }}</span>
+          <span class="tp-stat-card__icon" [class]="s.accent"><span class="material-symbols-outlined">{{ s.icon }}</span></span>
+        </div>
+        <h3>{{ s.value }}</h3>
+        <div class="tp-stat-card__note" [class]="s.tone">
+          @if (s.tone === 'positive') {
+            <span class="material-symbols-outlined">trending_up</span>
+          }
+          {{ s.note }}
+        </div>
+      </div>
+    }
+  </div>
+
+  <!-- Table -->
+  <div class="card tp-table-card">
+    <div class="tp-table-card__filters">
+      <div class="tp-filter">
+        <label>Phòng ban:</label>
+        <select [value]="selectedDepartment()" (change)="setDepartment($any($event.target).value)">
+          @for (d of departments; track d) {
+            <option [value]="d">{{ d }}</option>
+          }
+        </select>
+      </div>
+      <div class="tp-filter">
+        <label>Trạng thái:</label>
+        <select [value]="selectedStatus()" (change)="setStatus($any($event.target).value)">
+          @for (opt of statusOptions; track opt.value) {
+            <option [value]="opt.value">{{ opt.label }}</option>
+          }
+        </select>
+      </div>
+      <span class="tp-table-card__count">Hiển thị <b>{{ filteredEmployees().length }}</b> trên <b>{{ totalEmployees }}</b> kết quả</span>
+    </div>
+
+    <div class="tp-table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Mã NV</th>
+            <th>Họ và Tên</th>
+            <th>Phòng ban</th>
+            <th class="right">Lương cơ bản</th>
+            <th class="right">Phụ cấp/Thưởng</th>
+            <th class="right">Khấu trừ</th>
+            <th class="right">Thực lĩnh</th>
+            <th class="center">Thao tác</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (e of filteredEmployees(); track e.id) {
+            <tr>
+              <td class="mono navy">{{ e.code }}</td>
+              <td class="strong">{{ e.name }}</td>
+              <td class="muted">{{ e.department }}</td>
+              <td class="right mono">{{ e.base | number }}</td>
+              <td class="right mono">{{ e.allowance | number }}</td>
+              <td class="right mono negative">{{ e.deduction | number }}</td>
+              <td class="right mono strong navy">{{ e.net | number }}</td>
+              <td class="center">
+                <div class="tp-row-actions">
+                  <button type="button" class="icon-btn-plain"><span class="material-symbols-outlined">visibility</span></button>
+                  <button type="button" class="icon-btn-plain mauve"><span class="material-symbols-outlined">edit</span></button>
+                </div>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="8" class="tp-empty">Không có nhân viên phù hợp với bộ lọc.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="tp-table-card__foot">
+      <button type="button" class="tp-pager-nav" disabled><span class="material-symbols-outlined">chevron_left</span> Trang trước</button>
+      <div class="tp-pager">
+        <button type="button" class="active">1</button>
+        <button type="button">2</button>
+        <button type="button">3</button>
+        <span>...</span>
+        <button type="button">8</button>
+      </div>
+      <button type="button" class="tp-pager-nav">Trang sau <span class="material-symbols-outlined">chevron_right</span></button>
+    </div>
+  </div>
+
+  <!-- Insights -->
+  <div class="tp-insights">
+    <div class="card tp-tax-card">
+      <h3>Phân tích thuế &amp; bảo hiểm</h3>
+      <div class="tp-tax-card__list">
+        @for (t of taxBreakdown; track t.label) {
+          <div class="tp-tax-row">
+            <div class="tp-tax-row__head">
+              <span>{{ t.label }}</span>
+              <span class="mono strong">{{ t.value }}</span>
+            </div>
+            <div class="tp-tax-row__track">
+              <div class="tp-tax-row__fill" [class]="t.tone" [style.width.%]="t.pct"></div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+
+    <div class="tp-notice-card">
+      <h3>Thông báo kỳ lương</h3>
+      <p>Thời hạn phê duyệt bảng lương tháng 10/2023 còn 2 ngày. Vui lòng kiểm tra lại các khoản khấu trừ thuế trước khi chốt dữ liệu.</p>
+      <button type="button" class="tp-notice-card__cta">Xem lịch sử kỳ lương</button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,140 @@
+<div class="tx">
+  <header class="tx-header">
+    <div>
+      <div class="tx-breadcrumb">
+        <span>Bán hàng</span>
+        <span class="material-symbols-outlined">chevron_right</span>
+        <span class="tx-breadcrumb__current">Thu chi &amp; Giao dịch</span>
+      </div>
+      <h1>Quản lý khoản thu chi</h1>
+    </div>
+    <div class="tx-header__actions">
+      <button type="button" class="btn btn-outline"><span class="material-symbols-outlined">download</span> Xuất báo cáo</button>
+      <button type="button" class="btn btn-primary"><span class="material-symbols-outlined">add</span> Tạo đơn mới</button>
+    </div>
+  </header>
+
+  <!-- Summary bento -->
+  <div class="tx-stats">
+    <div class="card tx-stat-card">
+      <div class="tx-stat-card__row">
+        <span>Tổng thu trong ngày</span>
+        <span class="material-symbols-outlined navy">trending_up</span>
+      </div>
+      <p class="navy">{{ summary.inToday }} <span>VNĐ</span></p>
+    </div>
+    <div class="card tx-stat-card">
+      <div class="tx-stat-card__row">
+        <span>Tổng chi trong ngày</span>
+        <span class="material-symbols-outlined pink">trending_down</span>
+      </div>
+      <p class="pink">{{ summary.outToday }} <span>VNĐ</span></p>
+    </div>
+    <div class="card tx-stat-card">
+      <div class="tx-stat-card__row">
+        <span>Số dư khả dụng</span>
+        <span class="material-symbols-outlined">account_balance_wallet</span>
+      </div>
+      <p>{{ summary.balance }} <span>VNĐ</span></p>
+    </div>
+    <div class="tx-stat-card tx-stat-card--dark">
+      <span class="material-symbols-outlined tx-stat-card__watermark">receipt_long</span>
+      <div class="tx-stat-card__row">
+        <span>Công nợ quá hạn</span>
+        <span class="material-symbols-outlined warning">warning</span>
+      </div>
+      <p>{{ summary.overdueDebt }} <span>VNĐ</span></p>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="tx-filters">
+    <div class="tx-filters__field">
+      <span class="material-symbols-outlined">calendar_today</span>
+      <span>01/05/2024 - 31/05/2024</span>
+    </div>
+    <div class="tx-filters__field">
+      <span class="material-symbols-outlined">filter_list</span>
+      <select [value]="selectedCategory()" (change)="setCategory($any($event.target).value)">
+        @for (c of categories; track c) {
+          <option [value]="c">{{ c }}</option>
+        }
+      </select>
+    </div>
+    <div class="tx-filters__field">
+      <span>Phương thức thanh toán</span>
+      <span class="material-symbols-outlined">expand_more</span>
+    </div>
+    <div class="tx-filters__rows">
+      <span>Hiển thị:</span>
+      <select>
+        <option>20 dòng</option>
+        <option>50 dòng</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div class="card tx-table-card">
+    <div class="tx-table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Mã GD</th>
+            <th>Nguồn / Đối tác</th>
+            <th>Phân loại</th>
+            <th class="right">Số tiền (VNĐ)</th>
+            <th>Ngày thực hiện</th>
+            <th>Phương thức</th>
+            <th class="center">Trạng thái</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (t of filteredTransactions(); track t.id) {
+            <tr>
+              <td class="mono strong">{{ t.code }}</td>
+              <td>
+                <div class="tx-partner-cell">
+                  <span class="tx-partner-cell__avatar" [class]="categoryClass(t.category)">{{ t.initials }}</span>
+                  <div>
+                    <p class="tx-partner-cell__name">{{ t.partner }}</p>
+                    <p class="tx-partner-cell__note">{{ t.note }}</p>
+                  </div>
+                </div>
+              </td>
+              <td><span class="category-pill" [class]="categoryClass(t.category)">{{ t.category }}</span></td>
+              <td class="right mono strong" [class]="categoryClass(t.category)">
+                {{ t.direction === 'in' ? '+' : '-' }} {{ t.amount }}
+              </td>
+              <td class="date-cell">{{ t.date }}</td>
+              <td>
+                <div class="tx-method-cell">
+                  <span class="material-symbols-outlined">{{ t.methodIcon }}</span>
+                  <span>{{ t.method }}</span>
+                </div>
+              </td>
+              <td class="center"><span class="status-pill" [class]="t.status">{{ statusLabel[t.status] }}</span></td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="7" class="tx-empty">Không có giao dịch phù hợp với bộ lọc.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="tx-table-card__foot">
+      <span>Hiển thị {{ filteredTransactions().length }} trên tổng số {{ totalTransactions }} giao dịch</span>
+      <div class="tx-pager">
+        <button type="button" [disabled]="page() === 1" (click)="goToPage(page() - 1)"><span class="material-symbols-outlined">chevron_left</span></button>
+        @for (p of [1, 2, 3]; track p) {
+          <button type="button" class="tx-pager__num" [class.active]="page() === p" (click)="goToPage(p)">{{ p }}</button>
+        }
+        <span>...</span>
+        <button type="button" class="tx-pager__num" [class.active]="page() === 25" (click)="goToPage(25)">25</button>
+        <button type="button" (click)="goToPage(page() + 1)"><span class="material-symbols-outlined">chevron_right</span></button>
+      </div>
+    </div>
+  </div>
+</div>

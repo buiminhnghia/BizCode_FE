@@ -1,0 +1,136 @@
+<div class="ar">
+  <header class="ar-header">
+    <div>
+      <nav class="ar-breadcrumb">
+        <span>Tài chính</span>
+        <span class="material-symbols-outlined">chevron_right</span>
+        <span>Kiểm toán</span>
+        <span class="material-symbols-outlined">chevron_right</span>
+        <span class="current">Quản lý tổng doanh thu</span>
+      </nav>
+      <h1>Quản lý tổng doanh thu</h1>
+      <p>Phân tích chuyên sâu về luồng tiền và xu hướng tăng trưởng tháng 10/2024.</p>
+    </div>
+    <div class="ar-header__actions">
+      <button type="button" class="btn btn-outline"><span class="material-symbols-outlined">calendar_today</span> Tháng 10, 2024</button>
+      <button type="button" class="btn btn-accent"><span class="material-symbols-outlined">download</span> Xuất báo cáo</button>
+    </div>
+  </header>
+
+  <!-- KPI cards -->
+  <div class="ar-kpis">
+    @for (k of kpis; track k.label) {
+      <div class="card ar-kpi-card" [class.solid]="k.tone === 'solid'">
+        <div class="ar-kpi-card__row">
+          <span class="ar-kpi-card__icon" [class]="k.tone"><span class="material-symbols-outlined">{{ k.icon }}</span></span>
+          @if (k.note && k.tone !== 'neutral') {
+            <span class="ar-kpi-card__note"><span class="material-symbols-outlined">trending_up</span>{{ k.note }}</span>
+          }
+          @if (k.note && k.tone === 'neutral') {
+            <span class="ar-kpi-card__note plain">{{ k.note }}</span>
+          }
+        </div>
+        <p>{{ k.label }}</p>
+        <h3>{{ k.value }}</h3>
+        @if (k.tone === 'solid') {
+          <div class="ar-kpi-card__progress">
+            <div [style.width.%]="healthScorePct"></div>
+          </div>
+        }
+      </div>
+    }
+  </div>
+
+  <!-- Charts row -->
+  <div class="ar-charts">
+    <div class="card ar-trend-card">
+      <div class="ar-trend-card__head">
+        <h4>Xu hướng doanh thu theo thời gian</h4>
+        <div class="ar-legend">
+          <span><i class="navy"></i>Thực tế</span>
+          <span><i class="gray"></i>Dự báo</span>
+        </div>
+      </div>
+      <div class="ar-trend-card__chart">
+        <svg viewBox="0 0 800 300" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="arChartGradient" x1="0" x2="0" y1="0" y2="1">
+              <stop offset="0%" stop-color="#141f45" stop-opacity="0.18" />
+              <stop offset="100%" stop-color="#141f45" stop-opacity="0" />
+            </linearGradient>
+          </defs>
+          <path [attr.d]="areaPath()" fill="url(#arChartGradient)" />
+          <path [attr.d]="linePath()" fill="none" stroke="#141f45" stroke-width="4" stroke-linecap="round" />
+          @for (p of trendPoints; track p.x) {
+            <circle [attr.cx]="p.x" [attr.cy]="p.y" r="6" fill="#141f45" />
+          }
+        </svg>
+      </div>
+      <div class="ar-trend-card__labels">
+        @for (m of monthLabels; track m; let last = $last) {
+          <span [class.current]="last">{{ m }}</span>
+        }
+      </div>
+    </div>
+
+    <div class="card ar-donut-card">
+      <h4>Phân bổ nguồn doanh thu</h4>
+      <div class="ar-donut-wrap">
+        <div class="ar-donut" [style.background]="donutGradient()">
+          <div class="ar-donut__hole">
+            <span>Tổng cộng</span>
+            <strong>100%</strong>
+          </div>
+        </div>
+      </div>
+      <div class="ar-donut-legend">
+        @for (s of revenueSources; track s.label) {
+          <div class="ar-donut-legend__row">
+            <span class="ar-donut-legend__dot" [class]="s.tone"></span>
+            <span class="ar-donut-legend__label">{{ s.label }}</span>
+            <span class="ar-donut-legend__pct">{{ s.pct }}%</span>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div class="card ar-table-card">
+    <div class="ar-table-card__head">
+      <h4>Chi tiết doanh thu theo tháng</h4>
+      <button type="button" class="btn btn-outline btn-sm"><span class="material-symbols-outlined">filter_list</span> Bộ lọc</button>
+    </div>
+
+    <div class="ar-table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Tháng / Năm</th>
+            <th>Doanh thu gộp</th>
+            <th>Chi phí vận hành</th>
+            <th>Thuế &amp; Phí</th>
+            <th>Lợi nhuận ròng</th>
+            <th>Trạng thái</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (r of monthRows; track r.period) {
+            <tr>
+              <td class="strong">{{ r.period }}</td>
+              <td class="mono navy">{{ r.gross }}</td>
+              <td class="mono">{{ r.opex }}</td>
+              <td class="mono">{{ r.tax }}</td>
+              <td class="mono strong mauve">{{ r.net }}</td>
+              <td><span class="status-pill" [class]="r.status">{{ statusLabel[r.status] }}</span></td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="ar-table-card__foot">
+      <button type="button" class="ar-view-all">Xem tất cả lịch sử doanh thu</button>
+    </div>
+  </div>
+</div>

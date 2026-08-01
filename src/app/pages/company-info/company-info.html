@@ -1,0 +1,159 @@
+<div class="ci">
+  <header class="ci-header">
+    <div class="ci-breadcrumb">
+      <span>Hệ thống</span>
+      <span class="material-symbols-outlined">chevron_right</span>
+      <span>Hồ sơ công ty</span>
+    </div>
+    <h1>Thông tin doanh nghiệp</h1>
+    <p>Quản lý các thông tin định danh pháp lý và thông tin liên hệ chính thức của tổ chức.</p>
+  </header>
+
+  <div class="ci-grid">
+    <!-- Main column -->
+    <div class="ci-main">
+      <!-- Basic info -->
+      <section class="card ci-basic">
+        <button type="button" class="ci-basic__edit"><span class="material-symbols-outlined">edit</span> Chỉnh sửa</button>
+
+        <div class="ci-basic__body">
+          <div class="ci-logo">
+            <div class="ci-logo__box"><span class="material-symbols-outlined">apartment</span></div>
+            <p>Logo Doanh Nghiệp</p>
+          </div>
+
+          <div class="ci-basic__info">
+            <div>
+              <h3 class="ci-field-label">Tên doanh nghiệp</h3>
+              <p class="ci-company-name">CÔNG TY CỔ PHẦN CÔNG NGHỆ BIZCODE VIỆT NAM</p>
+            </div>
+
+            <div class="ci-field-grid">
+              <div>
+                <h3 class="ci-field-label">Mã số thuế (MST)</h3>
+                <div class="ci-taxcode">
+                  <code>{{ taxCode }}</code>
+                  <button type="button" (click)="copyTaxCode()" [attr.aria-label]="'Sao chép mã số thuế'">
+                    <span class="material-symbols-outlined">{{ copied() ? 'check' : 'content_copy' }}</span>
+                  </button>
+                </div>
+              </div>
+              <div>
+                <h3 class="ci-field-label">Ngày thành lập</h3>
+                <p class="ci-field-value">15 tháng 06, 2018</p>
+              </div>
+              <div>
+                <h3 class="ci-field-label">Người đại diện pháp luật</h3>
+                <div class="ci-field-value ci-with-icon">
+                  <span class="material-symbols-outlined">person</span>
+                  Ông Nguyễn Văn BizCode
+                </div>
+              </div>
+              <div>
+                <h3 class="ci-field-label">Lĩnh vực hoạt động</h3>
+                <span class="ci-tag">Công nghệ thông tin &amp; ERP</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Contact + address -->
+      <div class="ci-contact-grid">
+        <section class="card ci-contact">
+          <div class="ci-card-head">
+            <span class="ci-card-head__icon"><span class="material-symbols-outlined">call</span></span>
+            <h3>Kênh liên lạc</h3>
+          </div>
+          <div class="ci-contact__rows">
+            <div class="ci-contact__row"><span>Số điện thoại</span><strong>+84 24 1234 5678</strong></div>
+            <div class="ci-contact__row"><span>Email doanh nghiệp</span><strong>contact&#64;bizcode.com</strong></div>
+            <div class="ci-contact__row"><span>Website chính thức</span><a>www.bizcode.vn</a></div>
+          </div>
+        </section>
+
+        <section class="card ci-address">
+          <div class="ci-card-head">
+            <span class="ci-card-head__icon ci-card-head__icon--pink"><span class="material-symbols-outlined">location_on</span></span>
+            <h3>Địa chỉ trụ sở</h3>
+          </div>
+          <p class="ci-address__text">
+            Tầng 12, Tòa nhà Tech Plaza,<br />
+            Số 88 Đường Cầu Giấy, Quận Cầu Giấy,<br />
+            Thành phố Hà Nội, Việt Nam.
+          </p>
+          <button type="button" class="ci-address__map">
+            <span class="material-symbols-outlined">map</span> Xem trên bản đồ
+          </button>
+        </section>
+      </div>
+
+      <!-- History + QR -->
+      <div class="ci-bottom-grid">
+        <section class="card ci-history">
+          <h3>Lịch sử thay đổi thông tin</h3>
+          <div class="ci-timeline">
+            @for (h of history; track h.date) {
+              <div class="ci-timeline__item">
+                <span class="ci-timeline__dot" [class.current]="h.current"></span>
+                <p class="ci-timeline__date">{{ h.date }}</p>
+                <p class="ci-timeline__title">{{ h.title }}</p>
+                <p class="ci-timeline__desc">{{ h.desc }}</p>
+              </div>
+            }
+          </div>
+          <button type="button" class="ci-history__more">Xem toàn bộ lịch sử</button>
+        </section>
+
+        <section class="card ci-qr">
+          <div class="ci-qr__icon"><span class="material-symbols-outlined">qr_code_2</span></div>
+          <h3>Mã QR Doanh Nghiệp</h3>
+          <p>Sử dụng mã QR này để chia sẻ thông tin doanh nghiệp nhanh chóng cho đối tác.</p>
+          <button type="button" class="btn btn-outline">Tải xuống mã QR</button>
+        </section>
+      </div>
+    </div>
+
+    <!-- Side column -->
+    <div class="ci-side">
+      <div class="ci-verified">
+        <h3><span class="material-symbols-outlined">verified</span> Trạng thái xác thực</h3>
+        <div class="ci-verified__box">
+          <div class="ci-verified__row">
+            <span>Đã xác minh</span>
+            <span class="ci-verified__dot"></span>
+          </div>
+          <p>Hồ sơ doanh nghiệp đã được kiểm duyệt bởi hệ thống pháp lý BizCode.</p>
+        </div>
+        <p class="ci-verified__updated">Cập nhật lần cuối: 20/05/2024</p>
+      </div>
+
+      <div class="ci-certificate">
+        <div class="ci-certificate__visual">
+          <span class="material-symbols-outlined">workspace_premium</span>
+          <button type="button" class="ci-certificate__expand"><span class="material-symbols-outlined">fullscreen</span></button>
+          <div class="ci-certificate__caption">
+            <h4>Giấy chứng nhận số</h4>
+            <span>Reg No: BC-2018-99X</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card ci-stats">
+        <h3>Số liệu vận hành</h3>
+        <div class="ci-stats__main">
+          <div>
+            <span>Số lượng nhân viên</span>
+            <strong>156</strong>
+          </div>
+          <span class="ci-stats__trend"><span class="material-symbols-outlined">trending_up</span> 12%</span>
+        </div>
+        <div class="ci-stats__bar"><div style="width: 65%"></div></div>
+        <div class="ci-stats__grid">
+          <div><span>Chi nhánh</span><strong>04</strong></div>
+          <div><span>Dự án</span><strong>28</strong></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
