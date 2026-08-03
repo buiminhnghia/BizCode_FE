@@ -27,49 +27,77 @@
       <h1>Bắt đầu hành trình</h1>
       <p class="auth-subtitle">Nhập thông tin bên dưới để khởi tạo tài khoản miễn phí.</p>
 
-      <form (submit)="onSubmit($event)">
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
         <div class="form-group">
-          <label>Họ và tên</label>
+          <label for="fullName">Họ và tên</label>
           <div class="input-icon">
             <span class="material-symbols-outlined">person</span>
-            <input type="text" placeholder="Nguyễn Văn A" autocomplete="name" />
+            <input id="fullName" formControlName="fullName" type="text" placeholder="Nguyễn Văn A" autocomplete="name" />
           </div>
+          @if (hasError('fullName')) {
+            <p class="field-error">Vui lòng nhập họ và tên.</p>
+          }
         </div>
 
         <div class="form-group">
-          <label>Email doanh nghiệp</label>
+          <label for="email">Email doanh nghiệp</label>
           <div class="input-icon">
             <span class="material-symbols-outlined">mail</span>
-            <input type="email" placeholder="name&#64;company.com" autocomplete="email" />
+            <input id="email" formControlName="email" type="email" placeholder="name&#64;company.com" autocomplete="email" />
           </div>
+          @if (hasError('email')) {
+            <p class="field-error">Email không hợp lệ.</p>
+          }
         </div>
 
         <div class="form-group">
-          <label>Số điện thoại</label>
+          <label for="phoneNumber">Số điện thoại</label>
           <div class="input-icon">
             <span class="material-symbols-outlined">call</span>
-            <input type="tel" placeholder="09xx xxx xxx" autocomplete="tel" />
+            <input id="phoneNumber" formControlName="phoneNumber" type="tel" placeholder="09xx xxx xxx" autocomplete="tel" />
           </div>
+          @if (hasError('phoneNumber')) {
+            <p class="field-error">Số điện thoại không hợp lệ.</p>
+          }
         </div>
 
         <div class="form-group">
-          <label>Mật khẩu</label>
+          <label for="password">Mật khẩu</label>
           <div class="input-icon">
             <span class="material-symbols-outlined">lock</span>
-            <input [type]="showPassword() ? 'text' : 'password'" placeholder="••••••••" autocomplete="new-password" />
+            <input
+              id="password"
+              formControlName="password"
+              [type]="showPassword() ? 'text' : 'password'"
+              placeholder="••••••••"
+              autocomplete="new-password"
+            />
             <button type="button" class="input-icon__toggle" (click)="togglePassword()">
               <span class="material-symbols-outlined">{{ showPassword() ? 'visibility_off' : 'visibility' }}</span>
             </button>
           </div>
-          <p class="field-hint">Mật khẩu tối thiểu 8 ký tự, bao gồm chữ hoa và số.</p>
+          @if (hasError('password')) {
+            <p class="field-error">Mật khẩu tối thiểu 8 ký tự, bao gồm chữ hoa và số.</p>
+          } @else {
+            <p class="field-hint">Mật khẩu tối thiểu 8 ký tự, bao gồm chữ hoa và số.</p>
+          }
         </div>
 
         <label class="checkbox-row checkbox-row--terms">
-          <input type="checkbox" />
+          <input type="checkbox" formControlName="acceptTerms" />
           <span>Tôi đồng ý với <a>Điều khoản Dịch vụ</a> và <a>Chính sách Bảo mật</a> của BizCode.</span>
         </label>
+        @if (hasError('acceptTerms')) {
+          <p class="field-error field-error--terms">Bạn cần đồng ý với điều khoản để tiếp tục.</p>
+        }
 
-        <button type="submit" class="btn btn-primary auth-submit">Đăng ký tài khoản</button>
+        @if (submitError()) {
+          <p class="form-alert">{{ submitError() }}</p>
+        }
+
+        <button type="submit" class="btn btn-primary auth-submit" [disabled]="submitting()">
+          {{ submitting() ? 'Đang xử lý...' : 'Đăng ký tài khoản' }}
+        </button>
       </form>
 
       <div class="auth-divider"><span>Hoặc đăng ký với</span></div>
@@ -100,10 +128,54 @@
       <div class="modal-card" (click)="$event.stopPropagation()">
         <div class="modal-card__icon"><span class="material-symbols-outlined">mark_email_unread</span></div>
         <h2>Xác thực tài khoản</h2>
-        <p>Một liên kết xác nhận đã được gửi đến email của bạn. Vui lòng kiểm tra hộp thư (bao gồm cả thư rác) để hoàn tất đăng ký.</p>
-        <a href="https://mail.google.com" target="_blank" rel="noopener" class="btn btn-primary modal-card__cta">Mở Gmail</a>
-        <button type="button" class="modal-card__resend">Gửi lại mã</button>
-        <p class="modal-card__redirect-hint">Đang chuyển vào hệ thống BizCode...</p>
+        <p>
+          Nhập mã xác thực gồm 6 chữ số đã được gửi đến
+          @if (verifyEmail()) {
+            <strong>{{ verifyEmail() }}</strong>
+          } @else {
+            email của bạn
+          }. Vui lòng kiểm tra cả hộp thư rác.
+        </p>
+
+        <div class="otp-row" (paste)="onOtpPaste($event)">
+          @for (digit of otpDigits(); track $index) {
+            <input
+              #otpInput
+              class="otp-input"
+              [class.otp-input--filled]="digit"
+              type="text"
+              inputmode="numeric"
+              maxlength="1"
+              autocomplete="one-time-code"
+              [attr.aria-label]="'Chữ số thứ ' + ($index + 1)"
+              [value]="digit"
+              (input)="onOtpInput($index, $event)"
+              (keydown)="onOtpKeydown($index, $event)"
+              (focus)="onOtpFocus($event)"
+            />
+          }
+        </div>
+
+        @if (otpError()) {
+          <p class="otp-error">{{ otpError() }}</p>
+        }
+
+        <button
+          type="button"
+          class="btn btn-primary modal-card__cta"
+          [disabled]="!isOtpComplete() || verifying()"
+          (click)="confirmOtp()"
+        >
+          {{ verifying() ? 'Đang xác thực...' : 'Xác nhận' }}
+        </button>
+
+        <button type="button" class="modal-card__resend" [disabled]="resendCountdown() > 0" (click)="resendOtp()">
+          {{ resendCountdown() > 0 ? 'Gửi lại mã sau ' + resendCountdown() + 's' : 'Gửi lại mã' }}
+        </button>
+
+        @if (verifying()) {
+          <p class="modal-card__redirect-hint">Đang chuyển vào hệ thống BizCode...</p>
+        }
       </div>
     </div>
   }
