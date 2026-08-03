@@ -1,10 +1,8 @@
-<<<<<<< HEAD
-﻿.vs/
+# Visual Studio
+.vs/
 bin/
 obj/
 *.user
-=======
-# See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
 
 # Compiled output
 /dist
@@ -35,7 +33,7 @@ yarn-error.log
 .history/*
 
 # Miscellaneous
-/.angular/cache
+/.angular
 .sass-cache/
 /connect.lock
 /coverage
@@ -50,4 +48,3 @@ Thumbs.db
 
 # Claude Code local settings
 .claude/settings.local.json
->>>>>>> landing-page
